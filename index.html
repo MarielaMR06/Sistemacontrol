@@ -1,0 +1,2673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema de Trámites – Medios Publicitarios BA</title>
+  <style>
+    :root {
+      --primary: #1F4E79;
+      --primary-light: #2E75B6;
+      --bg: #f0f3f7;
+      --card: #ffffff;
+      --border: #d0d7e0;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --yellow: #FFF8E1;
+      --red: #FFC7CE;
+      --red-text: #9C0006;
+      --orange: #FFEB9C;
+      --orange-text: #9C5700;
+      --green: #C6EFCE;
+      --green-text: #006100;
+      --section: #e8f0fe;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+      position: sticky; top: 0; z-index: 40;
+    }
+    header h1 { font-size: 1.25rem; font-weight: 600; }
+    header p { font-size: .82rem; opacity: .9; margin-top: .15rem; }
+    .container { max-width: 1320px; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
+    .tabs { display: flex; gap: .4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .tab {
+      padding: .5rem 1rem; border: none; border-radius: 8px;
+      background: white; color: var(--primary); font-weight: 600;
+      cursor: pointer; font-size: .88rem; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    }
+    .tab:hover { background: #e8f0fe; }
+    .tab.active { background: var(--primary); color: white; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card {
+      background: var(--card); border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.07); padding: 1.1rem 1.25rem; margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-size: 1rem; color: var(--primary); margin-bottom: .85rem;
+      padding-bottom: .4rem; border-bottom: 2px solid var(--border);
+    }
+    .section-title {
+      background: var(--section);
+      color: var(--primary);
+      font-size: .9rem;
+      font-weight: 700;
+      padding: .55rem .85rem;
+      border-radius: 6px;
+      margin: 1.1rem 0 .7rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-title:hover { background: #d6e4f7; }
+    .section-title .chevron { transition: transform .2s; font-size: .75rem; }
+    .section-title.collapsed .chevron { transform: rotate(-90deg); }
+    .section-body { margin-bottom: .5rem; }
+    .section-body.hidden { display: none; }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: .7rem;
+    }
+    .form-grid.docs {
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    label {
+      display: block; font-size: .72rem; font-weight: 600;
+      color: var(--muted); margin-bottom: .2rem; text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    input, select, textarea {
+      width: 100%; padding: .42rem .55rem; border: 1px solid var(--border);
+      border-radius: 5px; font-size: .88rem; background: #fafbfc;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--primary-light);
+      background: white; box-shadow: 0 0 0 3px rgba(46,117,182,.12);
+    }
+    textarea { min-height: 60px; resize: vertical; }
+    .full { grid-column: 1 / -1; }
+    .doc-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .5rem .65rem;
+    }
+    .doc-item label { margin-bottom: .3rem; color: #374151; text-transform: none; font-size: .8rem; letter-spacing: 0; }
+    .doc-item select { font-size: .82rem; }
+    .btn-row { display: flex; gap: .5rem; margin-top: 1rem; flex-wrap: wrap; }
+    button {
+      padding: .5rem 1rem; border: none; border-radius: 6px;
+      font-weight: 600; font-size: .88rem; cursor: pointer;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #163a5c; }
+    .btn-secondary { background: #e5e7eb; color: #374151; }
+    .btn-secondary:hover { background: #d1d5db; }
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+    .btn-sm { padding: .28rem .55rem; font-size: .78rem; }
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: .6rem; margin-bottom: 1rem;
+    }
+    .stat {
+      background: white; border-radius: 8px; padding: .7rem .85rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05); text-align: center;
+    }
+    .stat .num { font-size: 1.45rem; font-weight: 700; color: var(--primary); }
+    .stat .label { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+    .stat.alert .num { color: #dc2626; }
+    .stat.warn .num { color: #d97706; }
+    .stat.ok .num { color: #059669; }
+    .filters {
+      display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: .85rem; align-items: end;
+    }
+    .filters > div { flex: 1; min-width: 130px; }
+    .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+    th {
+      background: var(--primary); color: white; padding: .5rem .6rem;
+      text-align: left; white-space: nowrap; font-weight: 600;
+      position: sticky; top: 0;
+    }
+    td { padding: .45rem .6rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+    tr:hover td { background: #f0f5fa; }
+    .badge {
+      display: inline-block; padding: .15rem .45rem; border-radius: 12px;
+      font-size: .72rem; font-weight: 600; white-space: nowrap;
+    }
+    .badge-ok { background: var(--green); color: var(--green-text); }
+    
+    .check-grid {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .88rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: .4rem .55rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #f8fafc;
+    }
+    .check-item input { width: 18px; height: 18px; accent-color: #0f766e; }
+    .check-item:has(input:checked) { background: #ecfdf5; border-color: #99f6e4; }
+
+    .badge-proceso { background: #dbeafe; color: #1e40af; }
+    .badge-urgente { background: var(--orange); color: var(--orange-text); }
+    .badge-vencido { background: var(--red); color: var(--red-text); }
+    .badge-estado { background: #e5e7eb; color: #374151; }
+    .actions {
+      display: flex;
+      gap: .35rem;
+      align-items: center;
+      white-space: nowrap;
+      min-width: 110px;
+    }
+    .actions .btn-sm {
+      flex-shrink: 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      line-height: 1.2;
+    }
+    .actions .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .actions .btn-primary:hover { background: #163a5c; }
+    .actions .btn-danger {
+      background: #dc2626;
+      color: white;
+      min-width: 28px;
+    }
+    .actions .btn-danger:hover { background: #b91c1c; }
+
+    .btn-urgente {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      font-weight: 700;
+    }
+    .btn-urgente:hover { background: #fde68a; }
+    .btn-urgente.activo {
+      background: #dc2626;
+      color: white;
+      border-color: #b91c1c;
+      animation: pulse-urg 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse-urg {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .85; }
+    }
+
+    td.col-acciones {
+      width: 1%;
+      white-space: nowrap;
+      vertical-align: middle;
+      background: transparent !important;
+    }
+    tr:hover td.col-acciones { background: #e8f0fe !important; }
+    .badge-agente {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 22px;
+      padding: 0 .4rem;
+      border-radius: 999px;
+      background: #1F4E79;
+      color: white;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    .agente-wrap {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      margin-top: .2rem;
+    }
+    .agente-wrap small { color: #6b7280; font-size: .72rem; }
+
+    .empty { text-align: center; padding: 2rem; color: var(--muted); }
+    .toast {
+      position: fixed; bottom: 1.25rem; right: 1.25rem;
+      background: #1f2937; color: white; padding: .65rem 1.1rem;
+      border-radius: 8px; font-size: .88rem; z-index: 100;
+      opacity: 0; transform: translateY(8px); transition: all .25s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4);
+      z-index: 50; align-items: center; justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: white; border-radius: 12px; padding: 1.35rem;
+      max-width: 400px; width: 92%; box-shadow: 0 10px 40px rgba(0,0,0,.2);
+    }
+    .modal h3 { margin-bottom: .6rem; color: var(--primary); }
+    .modal p { margin-bottom: 1.1rem; color: var(--muted); font-size: .9rem; }
+    footer { text-align: center; padding: .85rem; font-size: .78rem; color: var(--muted); }
+
+    .grupo-razon {
+      border: 2px solid #1F4E79;
+      border-radius: 10px;
+      padding: .75rem 1rem 1rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(180deg, #e8f0fe 0%, #f8fafc 48px);
+    }
+    .grupo-razon-titulo {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #1F4E79;
+      margin-bottom: .65rem;
+      letter-spacing: .02em;
+    }
+    .grupo-medios {
+      border: 2px solid #0f766e;
+      border-radius: 10px;
+      padding: .75rem 1rem 1rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(180deg, #ecfdf5 0%, #f8fafc 48px);
+    }
+    .grupo-medios-titulo {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #0f766e;
+      margin-bottom: .65rem;
+    }
+    .hint { font-size: .72rem; color: var(--muted); margin-top: .15rem; }
+
+    .medio-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .85rem;
+      margin-bottom: .75rem;
+      background: #f8fafc;
+    }
+    .medio-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+      align-items: end;
+      margin-bottom: .65rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .medio-card-header > div { flex: 1; min-width: 140px; }
+    .medio-card-header .btn-quitar {
+      flex: 0;
+      min-width: auto;
+      padding: .35rem .6rem;
+      background: #fee2e2;
+      color: #991b1b;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: .78rem;
+      cursor: pointer;
+    }
+    .medio-card-header .btn-quitar:hover { background: #fecaca; }
+    .medio-card .doc-item { background: white; }
+    @media (max-width: 640px) {
+      .form-grid, .form-grid.docs { grid-template-columns: 1fr; }
+    }
+
+    /* --- Auth --- */
+    #appRoot { display: none; }
+    #appRoot.visible { display: block; }
+    #authScreen {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1F4E79 0%, #2E75B6 55%, #e8f0fe 100%);
+      padding: 1.5rem;
+    }
+    #authScreen.hidden { display: none; }
+    .auth-card {
+      background: #fff; border-radius: 14px; padding: 1.6rem 1.5rem 1.4rem;
+      width: 100%; max-width: 420px; box-shadow: 0 12px 40px rgba(0,0,0,.18);
+    }
+    .auth-card h1 { font-size: 1.2rem; color: #1F4E79; margin-bottom: .25rem; }
+    .auth-card .sub { font-size: .82rem; color: #6b7280; margin-bottom: 1.1rem; }
+    .auth-tabs { display: flex; gap: .4rem; margin-bottom: 1rem; }
+    .auth-tab {
+      flex: 1; padding: .45rem; border: 1px solid #d0d7e0; border-radius: 8px;
+      background: #f8fafc; font-weight: 600; font-size: .85rem; color: #1F4E79; cursor: pointer;
+    }
+    .auth-tab.active { background: #1F4E79; color: #fff; border-color: #1F4E79; }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .auth-form .field { margin-bottom: .65rem; }
+    .auth-form label { display: block; font-size: .72rem; font-weight: 600; color: #6b7280; margin-bottom: .2rem; text-transform: uppercase; }
+    .auth-form input, .auth-form select {
+      width: 100%; padding: .48rem .6rem; border: 1px solid #d0d7e0; border-radius: 6px; font-size: .9rem;
+    }
+    .auth-msg { font-size: .85rem; margin: .55rem 0; min-height: 1.2em; }
+    .auth-msg.err { color: #9C0006; }
+    .auth-msg.ok { color: #006100; }
+    .auth-actions { display: flex; flex-direction: column; gap: .5rem; margin-top: .75rem; }
+    .auth-divider { text-align: center; font-size: .78rem; color: #9ca3af; margin: .7rem 0; position: relative; }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; position: absolute; top: 50%; width: 40%; height: 1px; background: #e5e7eb;
+    }
+    .auth-divider::before { left: 0; }
+    .auth-divider::after { right: 0; }
+    .user-bar {
+      display: flex; align-items: center; gap: .65rem; margin-left: auto; font-size: .8rem;
+    }
+    .user-bar .u-name { font-weight: 600; }
+    .user-bar .u-area { opacity: .85; font-size: .72rem; }
+    .user-bar button {
+      background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.35);
+      padding: .28rem .65rem; border-radius: 6px; font-size: .78rem; cursor: pointer;
+    }
+    .user-bar button:hover { background: rgba(255,255,255,.28); }
+    header .header-inner { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    header .header-text { flex: 1; min-width: 180px; }
+  </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+  <div id="authScreen">
+    <div class="auth-card">
+      <h1>Sistema de Trámites</h1>
+      <p class="sub">Medios Publicitarios – Provincia de Buenos Aires</p>
+      <p class="sub" style="margin-top:-.4rem;margin-bottom:1.1rem">Ingresá con tu cuenta de Google para continuar.</p>
+      <div id="loginMsg" class="auth-msg" style="text-align:center"></div>
+      <div id="googleBtnSlot" style="display:flex;justify-content:center;min-height:48px;margin:.5rem 0 1rem"></div>
+      <p id="googleHint" class="hint" style="text-align:center;display:none">
+        Configurá <code>GOOGLE_CLIENT_ID</code> en el HTML (Google Cloud Console → Credenciales → ID de cliente OAuth).
+      </p>
+      <p class="hint" style="text-align:center;margin-top:.85rem">
+        Solo personal autorizado. Cada carga y eliminación queda registrada a tu usuario.
+      </p>
+    </div>
+  </div>
+
+  <div id="appRoot">
+  <header>
+    <div class="header-inner">
+      <div class="header-text">
+        <h1>Sistema de Seguimiento de Trámites</h1>
+        <p>Registro Oficial de Medios Publicitarios – Provincia de Buenos Aires</p>
+      </div>
+      <div class="user-bar" id="userBar">
+        <div>
+          <div class="u-name" id="userBarName">—</div>
+          <div class="u-area" id="userBarArea"></div>
+        </div>
+        <button type="button" id="btnLogout" title="Cerrar sesión">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <button class="tab active" data-tab="lista">📋 Lista</button>
+      <button class="tab" data-tab="cargar">➕ Cargar / Editar</button>
+      <button class="tab" data-tab="dashboard">📊 Informe</button>
+    </div>
+
+    <div id="lista" class="panel active">
+      <div class="stats" id="statsBar"></div>
+      <div class="card">
+        <div class="filters">
+          <div>
+            <label>Buscar</label>
+            <input type="text" id="filtroTexto" placeholder="Razón social o CUIT" />
+          </div>
+          <div>
+            <label>Estado</label>
+            <select id="filtroEstado">
+              <option value="">Todos</option>
+              <option>Activo</option>
+              <option>Corrección</option>
+              <option>Vencido</option>
+              <option value="Urgente">Urgente</option>
+            </select>
+          </div>
+          
+        </div>
+        <div class="btn-row" style="margin-bottom:.75rem">
+          <button type="button" class="btn-secondary btn-sm" onclick="cargarDesdeSheets(function(){ renderLista(); toast('Lista actualizada'); })">↻ Sincronizar desde Sheets</button>
+          <button type="button" class="btn-primary btn-sm" onclick="document.getElementById('pdfListadoMes').click()">＋ CARGAR LISTADO DEL MES</button>
+          <input type="file" id="pdfListadoMes" accept="application/pdf,.pdf" style="display:none" onchange="abrirPdfYCargarListado(event)" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Razón Social</th>
+                <th>Agente</th>
+                <th>Medio</th>
+                <th>Estado</th>
+                <th>Alerta</th>
+                <th>Observaciones / Seguimiento</th>
+                <th>Fechas</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tablaBody"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="cargar" class="panel">
+      <div class="card">
+        <h2 id="formTitulo">Nuevo proveedor / trámite</h2>
+        <form id="formTramite" onsubmit="guardar(event)">
+          <input type="hidden" id="editId" />
+
+          <div class="grupo-razon"><div class="grupo-razon-titulo">RAZÓN SOCIAL</div>
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>1. DATOS GENERALES</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            <div class="form-grid">
+              <div>
+                <label>Nombre del Agente</label>
+                <input type="text" id="personal" placeholder="" />
+              </div>
+              <div>
+                <label>Urgente</label>
+                <select id="urgente">
+                  <option value="">NO</option>
+                  <option value="si">SI</option>
+                </select>
+              </div>
+              <div>
+                <label>Pedido por...</label>
+                <input type="text" id="urgentePor" placeholder="Quién solicita el urgente" />
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:.55rem">
+              <div>
+                <label>Nº Expediente / Legajo</label>
+                <input type="text" id="nroExpediente" placeholder="EX-2026-xxxxxxxx- -GDEBA-DPAPOMCPGP" />
+              </div>
+              <div>
+                <label>CUIT</label>
+                <input type="text" id="cuit" placeholder="XX-XXXXXXXX-X" />
+              </div>
+              <div>
+                <label>Razón Social / Nombre *</label>
+                <input type="text" id="razonSocial" required placeholder="Nombre del proveedor" />
+              </div>
+              <div>
+                <label>Mail</label>
+                <input type="email" id="mail" placeholder="" />
+              </div>
+              <div>
+                <label>Vencimiento del sistema</label>
+                <input type="date" id="vtoSistema" />
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:.55rem">
+              <div>
+                <label>Tipo Trámite *</label>
+                <select id="tipoTramite">
+                  <option value="">Seleccionar...</option>
+                  <option>Inscripción</option>
+                  <option>Reinscripción</option>
+                </select>
+              </div>
+              <div>
+                <label>Fecha Presentación *</label>
+                <input type="date" id="fechaPresentacion" />
+              </div>
+              <div>
+                <label>Fecha Límite Corrección</label>
+                <input type="date" id="fechaLimiteSub" />
+                <div class="hint">Si está vacío y el estado es Corrección, se calculan 30 días</div>
+              </div>
+              <div>
+                <label>Fecha de Activo</label>
+                <input type="date" id="fechaAlta" />
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:.55rem">
+              <div>
+                <label>Tipo de Persona</label>
+                <select id="tipoPersona">
+                  <option value="">Seleccionar...</option>
+                  <option>Física</option>
+                  <option>Jurídica</option>
+                </select>
+              </div>
+              <input type="hidden" id="apoderado" value="" />
+              <div>
+                <label>Estado Actual</label>
+                <select id="estado">
+                  <option value="">—</option>
+                  <option>Activo</option>
+                  <option>Corrección</option>
+                  <option>Vencido</option>
+                </select>
+              </div>
+            </div>
+            <!-- tipoMedio y nombreMedio ocultos: se sincronizan desde MEDIOS -->
+            <input type="hidden" id="tipoMedio" value="" />
+            <input type="hidden" id="nombreMedio" value="" />
+            <input type="hidden" id="nroInterno" value="" />
+          </div>
+
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>2. DOCUMENTACIÓN</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            <div class="form-grid docs" style="margin-bottom:.85rem">
+              <div class="doc-item">
+                <label>SA / SRL / COOP / OTRO</label>
+                <select id="tipoSocietario">
+                  <option value="">—</option>
+                  <option>SA</option>
+                  <option>SRL</option>
+                  <option>COOP</option>
+                  <option>OTRO</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Estatuto social o Contrato Constitutivo</label>
+                <select id="docEstatuto">
+                  <option value="">—</option>
+                  <option>Certificado</option>
+                  <option>Pendiente</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>INSCRIPCIÓN</label>
+                <select id="inscripcionSoc">
+                  <option value="">—</option>
+                  <option>IGJ</option>
+                  <option>DPPJ</option>
+                  <option>INAES</option>
+                  <option>OTRO</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Acta de designación de autoridades</label>
+                <select id="docActa">
+                  <option value="">—</option>
+                  <option>Certificada</option>
+                  <option>Pendiente</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Vencimiento de Autoridades</label>
+                <input type="date" id="vtoAutoridades" />
+              </div>
+              <div class="doc-item">
+                <label>RENOVACIÓN</label>
+                <input type="text" id="renovacionAutoridades" placeholder="Vigencia / período de renovación" />
+              </div>
+            </div>
+            <div id="bloqueAutoridadesUI"></div>
+            <div class="btn-row" style="margin-top:.5rem">
+              <button type="button" class="btn-secondary" onclick="agregarAutoridad()">＋ Agregar autoridad</button>
+            </div>
+            <p class="hint" style="margin:1rem 0 .4rem;font-weight:600;color:#1F4E79">Apoderado (si corresponde)</p>
+            <div class="form-grid docs">
+              <div class="doc-item">
+                <label>DJ Incompatibilidad – Apoderado</label>
+                <select id="apoDjIncomp">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Firmada (vigente)</option>
+                  <option>Certificada</option>
+                  <option>Observada</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Apoderado – Nombre</label>
+                <input type="text" id="apoNombre" placeholder="Si corresponde" />
+              </div>
+              <div class="doc-item">
+                <label>Poder</label>
+                <select id="apoPoder">
+                  <option value="">—</option>
+                  <option>Certificado</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Apoderado – DNI</label>
+                <input type="text" id="apoDni" placeholder="DNI" />
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>3. ASPECTOS IMPOSITIVOS</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            <div class="form-grid docs">
+              <div class="doc-item">
+                <label>AFIP – Constancia inscripción</label>
+                <select id="afipConstancia">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>F. 931 (empleador)</label>
+                <select id="f931">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>No aplica</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Monotributo</label>
+                <select id="monotributo">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>No aplica</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>F. 152</label>
+                <select id="f152">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>No aplica</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>F. 184</label>
+                <select id="f184">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>No aplica</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>ARBA</label>
+                <select id="iibb">
+                  <option value="">—</option>
+                  <option>IIBB</option>
+                  <option>CM01</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>ARBA – Constancia de Inscripción</label>
+                <select id="compRecibo">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Observado</option>
+                  <option>Presentado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>CBU</label>
+                <select id="cbu">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Sueldo / Haberes J.</label>
+                <select id="sueldo">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>Presentado</option>
+                  <option>No aplica</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+              <div class="doc-item">
+                <label>Factura (B / C)</label>
+                <select id="factura">
+                  <option value="">—</option>
+                  <option>Pendiente</option>
+                  <option>B</option>
+                  <option>C</option>
+                  <option>Observado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          </div>
+
+          <div class="grupo-medios"><div class="grupo-medios-titulo">MEDIOS</div>
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>4. DOCUMENTACIÓN MEDIOS</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            
+            <div id="listaMedios"></div>
+            <div class="btn-row" style="margin-top:.5rem">
+              <button type="button" class="btn-secondary" onclick="agregarMedio()">＋ Agregar otro medio</button>
+            </div>
+          </div>
+
+          </div>
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>5. OBSERVACIONES</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            <div class="form-grid">
+              <div class="full">
+                <label>Observaciones del trámite / Documentación faltante</label>
+                <textarea id="observaciones" placeholder="Se completa solo con lo Pendiente u Observado. Podés agregar notas abajo."></textarea>
+                <div class="hint">Se actualiza solo: todo lo marcado Pendiente u Observado aparece acá en lista. Las notas manuales se conservan debajo de “--- Notas ---”.</div>
+                <div class="btn-row" style="margin-top:.4rem">
+                  <button type="button" class="btn-secondary btn-sm" onclick="actualizarObservacionesAuto()">Actualizar lista de faltantes</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>6. ACTUALIZACIÓN</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            <p class="hint" style="margin-bottom:.5rem">Registrá cada actualización hasta el alta final.</p>
+            <div id="bloqueActualizaciones"></div>
+            <div class="btn-row" style="margin-top:.5rem">
+              <button type="button" class="btn-secondary" onclick="agregarActualizacion()">＋ Agregar actualización</button>
+            </div>
+            <div class="full" style="margin-top:.65rem">
+              <label>Detalle de actualizaciones (opcional)</label>
+              <textarea id="detalleActualizaciones" placeholder="Notas sobre las actualizaciones..."></textarea>
+            </div>
+          </div>
+
+          <div class="section-title" onclick="toggleSection(this)">
+            <span>7. TRÁMITE FINALIZADO</span><span class="chevron">▼</span>
+          </div>
+          <div class="section-body">
+            <p class="hint" style="margin-bottom:.5rem">Marcá cada paso de cierre del trámite (CARGA).</p>
+            <div class="check-grid" id="bloqueFinalizado">
+              <label class="check-item"><input type="checkbox" id="finAltaSistema" /> Alta en el sistema</label>
+              <label class="check-item"><input type="checkbox" id="finServidor" /> Guardar archivo en el SERVIDOR</label>
+              <label class="check-item"><input type="checkbox" id="finGmail" /> Guardar archivo en GMAIL</label>
+              <label class="check-item"><input type="checkbox" id="finComprobante" /> Envío del COMPROBANTE</label>
+              <label class="check-item"><input type="checkbox" id="finBorrarMails" /> Borrar mails</label>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button type="submit" class="btn-primary" id="btnGuardar">💾 Guardar</button>
+            <button type="button" class="btn-secondary" onclick="limpiarForm()">Limpiar</button>
+            <button type="button" class="btn-secondary" id="btnCancelar" style="display:none" onclick="cancelarEdicion()">Cancelar edición</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="dashboard" class="panel">
+      <div class="card">
+        <h2 style="margin-top:0">Informe del día</h2>
+        <p class="hint">Generá un PDF con las Inscripciones y Reinscripciones cargadas o actualizadas en el día seleccionado.</p>
+        <div class="form-grid" style="max-width:420px;margin-top:.75rem">
+          <div>
+            <label>Fecha del informe</label>
+            <input type="date" id="informeFecha" />
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:1rem">
+          <button type="button" class="btn-primary" onclick="generarInformePDF()">⬇ Descargar informe PDF</button>
+        </div>
+        <div id="informePreview" style="margin-top:1rem;font-size:.85rem;color:#374151"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    Datos en Google Sheets (fuente de verdad). Sesión de usuario obligatoria para auditar altas y bajas.
+  </footer>
+  </div><!-- /appRoot -->
+
+  <div class="toast" id="toast"></div>
+  <div class="modal-overlay" id="modalEliminar">
+    <div class="modal">
+      <h3>¿Eliminar este registro?</h3>
+      <p id="modalTexto">Esta acción no se puede deshacer.</p>
+      <div class="btn-row">
+        <button class="btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+        <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'tramites_medios_ba_v4_cero';
+    const SESSION_KEY = 'tramites_medios_ba_usuario';
+    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyE0mdsJeFBHcqAlY64jBGUOb8H6h8Vd5oo4a4W1AY9rFikO_4QGn-lgQxxVsx-i0Zs/exec';
+    // Client ID de Google Cloud Console (tipo "Aplicación web") para Continuar con Google.
+    // Orígenes autorizados: la URL de GitHub Pages (u otro hosting) donde esté el HTML.
+    const GOOGLE_CLIENT_ID = '';
+
+    let usuarioActual = null;
+
+    function getUsuario() {
+      if (usuarioActual) return usuarioActual;
+      try {
+        const raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
+        if (raw) usuarioActual = JSON.parse(raw);
+      } catch (e) { usuarioActual = null; }
+      return usuarioActual;
+    }
+    function setUsuario(u) {
+      usuarioActual = u;
+      if (u) {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(u));
+        localStorage.setItem(SESSION_KEY, JSON.stringify(u));
+      } else {
+        sessionStorage.removeItem(SESSION_KEY);
+        localStorage.removeItem(SESSION_KEY);
+      }
+    }
+    function nombreUsuario() {
+      const u = getUsuario();
+      if (!u) return '';
+      return u.nombreCompleto || [u.nombre, u.apellido].filter(Boolean).join(' ').trim() || u.email || '';
+    }
+    function auditFields() {
+      const u = getUsuario();
+      if (!u) return {};
+      return {
+        usuarioId: u.id || '',
+        usuarioEmail: u.email || '',
+        usuarioNombre: nombreUsuario()
+      };
+    }
+    function requiereLogin() {
+      if (getUsuario()) return true;
+      toast('Tenés que iniciar sesión');
+      mostrarAuth();
+      return false;
+    }
+    function mostrarAuth() {
+      document.getElementById('authScreen').classList.remove('hidden');
+      document.getElementById('appRoot').classList.remove('visible');
+    }
+    function mostrarApp() {
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('appRoot').classList.add('visible');
+      const u = getUsuario();
+      if (u) {
+        document.getElementById('userBarName').textContent = nombreUsuario();
+        document.getElementById('userBarArea').textContent = (u.area || u.email || '');
+        // Autocompletar agente si está vacío
+        var per = document.getElementById('personal');
+        if (per && !per.value) per.value = nombreUsuario();
+      }
+    }
+    function postAuth(payload) {
+      return fetch(SHEETS_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).then(function (res) { return res.text(); })
+        .then(function (text) {
+          try { return JSON.parse(text); }
+          catch (e) { return { ok: false, mensaje: 'Respuesta inválida del servidor' }; }
+        });
+    }
+    function initAuthUI() {
+      document.getElementById('btnLogout').addEventListener('click', function () {
+        setUsuario(null);
+        try {
+          if (window.google && google.accounts && google.accounts.id) {
+            google.accounts.id.disableAutoSelect();
+          }
+        } catch (e) {}
+        mostrarAuth();
+        initGoogleButton();
+        toast('Sesión cerrada');
+      });
+      initGoogleButton();
+    }
+
+    function initGoogleButton() {
+      var slot = document.getElementById('googleBtnSlot');
+      var hint = document.getElementById('googleHint');
+      var msg = document.getElementById('loginMsg');
+      if (!GOOGLE_CLIENT_ID) {
+        if (hint) hint.style.display = 'block';
+        if (slot) {
+          slot.innerHTML = '<button type="button" class="btn-google" disabled title="Configurá GOOGLE_CLIENT_ID">Continuar con Google (no configurado)</button>';
+        }
+        if (msg) {
+          msg.className = 'auth-msg err';
+          msg.textContent = 'Falta configurar GOOGLE_CLIENT_ID en el HTML.';
+        }
+        return;
+      }
+      if (hint) hint.style.display = 'none';
+      var tries = 0;
+      var t = setInterval(function () {
+        tries++;
+        if (window.google && google.accounts && google.accounts.id) {
+          clearInterval(t);
+          google.accounts.id.initialize({
+            client_id: GOOGLE_CLIENT_ID,
+            callback: function (resp) {
+              if (!resp || !resp.credential) return;
+              if (msg) {
+                msg.className = 'auth-msg';
+                msg.textContent = 'Validando con Google…';
+              }
+              postAuth({ _accion: 'login_google', id_token: resp.credential })
+                .then(function (json) {
+                  if (json && json.ok && json.usuario) {
+                    setUsuario(json.usuario);
+                    if (msg) {
+                      msg.className = 'auth-msg ok';
+                      msg.textContent = 'Bienvenida/o';
+                    }
+                    iniciarAppTrasLogin();
+                  } else {
+                    if (msg) {
+                      msg.className = 'auth-msg err';
+                      msg.textContent = (json && json.mensaje) || 'No se pudo validar con Google';
+                    }
+                  }
+                })
+                .catch(function () {
+                  if (msg) {
+                    msg.className = 'auth-msg err';
+                    msg.textContent = 'Error de red. Reintentá.';
+                  }
+                });
+            },
+            auto_select: false,
+            cancel_on_tap_outside: true
+          });
+          if (slot) {
+            slot.innerHTML = '';
+            google.accounts.id.renderButton(slot, {
+              theme: 'outline',
+              size: 'large',
+              text: 'continue_with',
+              shape: 'rectangular',
+              width: 320
+            });
+          }
+        } else if (tries > 50) {
+          clearInterval(t);
+          if (msg) {
+            msg.className = 'auth-msg err';
+            msg.textContent = 'No se pudo cargar Google Sign-In. Revisá la conexión.';
+          }
+        }
+      }, 150);
+    }
+    function iniciarAppTrasLogin() {
+      mostrarApp();
+      cargarDesdeSheets(function () {
+        renderLista();
+        if (document.getElementById('dashboard').classList.contains('active')) renderDashboard();
+      });
+    }
+    const LISTADO_NOV_2026 = [
+      {id:'nov26-1',nroInterno:'1',razonSocial:'GRECO LEONARDO HUMBERTO',cuit:'20120136888',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-03',nroExpediente:'2140-4470/2022',mail:'giselanoemimiranda@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-2',nroInterno:'2',razonSocial:'BATPER SERVICIOS PUBLICITARIOS S.R.L.',cuit:'30709282650',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-03',nroExpediente:'2140-3522/2020',mail:'guillelobo@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-3',nroInterno:'3',razonSocial:'LA NONNA MEDIA S.R.L',cuit:'30718508777',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-04',nroExpediente:'',mail:'emicoroniti@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-4',nroInterno:'4',razonSocial:'WORLD MANAGEMENT S.R.L.',cuit:'30711345791',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-04',nroExpediente:'2140-3821/2021',mail:'info@wm-agency.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-5',nroInterno:'5',razonSocial:'SOSA NOELIA ANAHI',cuit:'27345822599',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-05',nroExpediente:'2140-2958/2019',mail:'ns.noesosa@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-6',nroInterno:'6',razonSocial:'BRAND PLUS S.R.L.',cuit:'30710557647',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-07',nroExpediente:'2140-2655/2019',mail:'info@brandpluslatam.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-7',nroInterno:'7',razonSocial:'PIERI FEDERICO ISIDORO',cuit:'20277080754',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-07',nroExpediente:'2140-2859/2019',mail:'federicopieri@radionortefm.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-8',nroInterno:'8',razonSocial:'WALL STREET VIA PUBLICA S.A.',cuit:'30655418381',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-11',nroExpediente:'2140-1778/2017',mail:'ncospide@grupoalsur.com.ar',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-9',nroInterno:'9',razonSocial:'CARDOSO MARCOS CESAR',cuit:'20258394551',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-12',nroExpediente:'2140-1053/2017',mail:'keopsfm@hotmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-10',nroInterno:'10',razonSocial:'EDITORIAL LA CAPITAL S.A.',cuit:'30593143216',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-12',nroExpediente:'2140-1645/2017',mail:'administracion@lacapitalmdq.com.ar',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-11',nroInterno:'11',razonSocial:'COOPERATIVA DE TRABAJO PRESENTE LIMITADA',cuit:'30717762610',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-13',nroExpediente:'2140-4866/2023',mail:'noticiaspresente@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-12',nroInterno:'12',razonSocial:'LATORRE DIEGO RUBEN',cuit:'20250410590',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-13',nroExpediente:'',mail:'minutogesell@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-13',nroInterno:'13',razonSocial:'PUBLICIDAD SUDMAR S.R.L.',cuit:'30650979288',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-14',nroExpediente:'2140-103/2016',mail:'publicidadsudmar@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-14',nroInterno:'14',razonSocial:'MATERI ALFREDO JESUS',cuit:'20112861247',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-17',nroExpediente:'2140-4902/2023',mail:'ajm3965@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-15',nroInterno:'15',razonSocial:'SECO SEBASTIAN ALBERTO',cuit:'20247968904',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-20',nroExpediente:'2140-2479/2018',mail:'pilardetodos@yahoo.com.ar',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-16',nroInterno:'16',razonSocial:'XLRVIVO S.R.L.',cuit:'30717435741',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-25',nroExpediente:'',mail:'martin@gonnagoprod.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-17',nroInterno:'17',razonSocial:'BARONI DANIEL EDUARDO',cuit:'20183242513',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-26',nroExpediente:'',mail:'daniel@turismo530.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-18',nroInterno:'18',razonSocial:'STECCONI RICARDO NORBERTO',cuit:'20142491320',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-26',nroExpediente:'2140-4003/2021',mail:'info@radiocitycampana.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-19',nroInterno:'19',razonSocial:'TELEVISION ABC S.A.',cuit:'30636827661',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-27',nroExpediente:'2140-2560/2019',mail:'facturacion@canal9.com.ar',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-20',nroInterno:'20',razonSocial:'LUNA RUBEN JOSE',cuit:'20083153297',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-27',nroExpediente:'2140-3998/2021',mail:'rlunatv4@hotmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-21',nroInterno:'21',razonSocial:'RADIO CHASCOMUS S.A.',cuit:'30707287787',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-28',nroExpediente:'2140-559/2016',mail:'radiochascomusam1520@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-22',nroInterno:'22',razonSocial:'PALACIO GÜIDA FEDERICA MARIA DEOLINDA',cuit:'27302404203',tipoPersona:'Física',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-28',nroExpediente:'2140-3042/2019',mail:'pinarbeachfm@gmail.com',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]},
+      {id:'nov26-23',nroInterno:'23',razonSocial:'VOCACION S.R.L.',cuit:'33628152689',tipoPersona:'Jurídica',tipoTramite:'Reinscripción',estado:'',vtoSistema:'2026-11-28',nroExpediente:'2140-2614/2019',mail:'claudia@vocacion.net',observaciones:'Pendiente de recepción de documentación.',actualizado:new Date().toISOString(),medios:[],autoridades:[]}
+    ];
+
+    let datos = [];
+    let idEliminar = null;
+    let eliminaciones = []; // log de eliminaciones para el informe: [{id, razonSocial, cuit, agente, fecha, nroInterno}]
+    const ELIM_KEY = 'tramites_medios_ba_eliminaciones';
+
+    function cargarEliminaciones() {
+      try {
+        const raw = localStorage.getItem(ELIM_KEY);
+        eliminaciones = raw ? JSON.parse(raw) : [];
+      } catch (e) { eliminaciones = []; }
+    }
+    function guardarEliminaciones() {
+      localStorage.setItem(ELIM_KEY, JSON.stringify(eliminaciones));
+    }
+
+    const DOC_FIELDS = [
+      'djAnio','apoDjIncomp','apoNombre','apoPoder','apoDni',
+      'docEstatuto','docActa','docPoder','tipoSocietario','inscripcionSoc','vtoAutoridades','renovacionAutoridades',
+      'afipConstancia','f931','monotributo','f152','f184','compRecibo','iibb','cbu','sueldo','factura',
+      'ag_dj','ag_resena','ag_enacom',
+      'web_dj','web_resena','web_rl','web_dominio','web_obra','web_tarifario','web_capturas','web_autorizacion',
+      'rad_dj','rad_resena','rad_adjudicacion','rad_vtoLicencia','rad_grilla','rad_tarifario','rad_autorizacion',
+      'tv_dj','tv_resena','tv_enacom','tv_grilla','tv_tarifario','tv_autorizacion',
+      'dia_dj','dia_resena','dia_rl','dia_ins','dia_medidas','dia_tarifario','dia_ejemplar','dia_autorizacion',
+      'rev_dj','rev_resena','rev_rl','rev_ins','rev_medidas','rev_tarifario','rev_ejemplar','rev_autorizacion',
+      'pro_dj','pro_resena','pro_produccion','pro_grilla','pro_tarifario','pro_streaming','pro_capturas',
+      'vp_dj','vp_resena','vp_listado','vp_tarifario','vp_circuito','vp_medidas',
+      'camp_dj','camp_resena','camp_propuesta',
+      'inv_dj','inv_resena','inv_propuesta',
+      'disp_dj','disp_resena','disp_propuesta',
+      'otro_docs','detalleActualizaciones',
+    ];
+
+
+    function normalizarItemDesdeSheets(raw) {
+      if (!raw || typeof raw !== 'object') return raw;
+      const item = Object.assign({}, raw);
+      // Rehidratar JSON por si el script devolviera strings
+      if (typeof item.medios === 'string') {
+        try { item.medios = JSON.parse(item.medios); } catch (e) { item.medios = []; }
+      }
+      if (!Array.isArray(item.medios) && item.medios_json) {
+        try { item.medios = JSON.parse(item.medios_json); } catch (e) { item.medios = []; }
+      }
+      if (!Array.isArray(item.medios)) item.medios = [];
+      if (typeof item.autoridades === 'string') {
+        try { item.autoridades = JSON.parse(item.autoridades); } catch (e) { item.autoridades = []; }
+      }
+      if (!Array.isArray(item.autoridades) && item.autoridades_json) {
+        try { item.autoridades = JSON.parse(item.autoridades_json); } catch (e) { item.autoridades = []; }
+      }
+      if (!Array.isArray(item.autoridades)) item.autoridades = [];
+      if (typeof item.actualizaciones === 'string') {
+        try { item.actualizaciones = JSON.parse(item.actualizaciones); } catch (e) { item.actualizaciones = []; }
+      }
+      if (!Array.isArray(item.actualizaciones) && item.actualizaciones_json) {
+        try { item.actualizaciones = JSON.parse(item.actualizaciones_json); } catch (e) { item.actualizaciones = []; }
+      }
+      if (!Array.isArray(item.actualizaciones)) item.actualizaciones = [];
+      item.urgente = item.urgente === true || item.urgente === 'true' || item.urgente === 'TRUE' || item.urgente === 'si';
+      ['finAltaSistema','finServidor','finGmail','finComprobante','finBorrarMails'].forEach(function(k) {
+        item[k] = item[k] === true || item[k] === 'true' || item[k] === 'TRUE';
+      });
+      return item;
+    }
+
+    function cargarDesdeSheets(callback) {
+      if (!SHEETS_URL) {
+        if (callback) callback(false);
+        return;
+      }
+      // GET al script (doGet) — fuente de verdad entre dispositivos
+      fetch(SHEETS_URL + '?accion=listar', { method: 'GET', redirect: 'follow' })
+        .then(function(res) { return res.text(); })
+        .then(function(text) {
+          try {
+            const json = JSON.parse(text);
+            if (json && json.ok && Array.isArray(json.datos)) {
+              // Sheets manda la lista completa (puede estar vacía a propósito)
+              datos = json.datos.map(normalizarItemDesdeSheets);
+              guardarDatos(); // caché local de respaldo
+              if (Array.isArray(json.eliminaciones)) {
+                eliminaciones = json.eliminaciones.map(function(e) {
+                  return {
+                    id: e.id || '',
+                    nroInterno: e.nroInterno || '',
+                    razonSocial: e.razonSocial || '',
+                    cuit: e.cuit || '',
+                    agente: e.agente || e.eliminadoPor || '',
+                    tipoTramite: e.tipoTramite || '',
+                    fecha: e.fecha || ''
+                  };
+                });
+                guardarEliminaciones();
+              }
+              toast('Sincronizado desde Sheets (' + datos.length + ')');
+              if (callback) callback(true);
+              return;
+            }
+          } catch (e) {
+            console.warn('Sheets parse:', e, text && text.slice(0, 200));
+          }
+          if (callback) callback(false);
+        })
+        .catch(function(err) {
+          console.warn('Sheets load:', err);
+          if (callback) callback(false);
+        });
+    }
+
+
+
+    function abrirPdfYCargarListado(ev) {
+      const file = ev.target.files && ev.target.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        window.open(url, '_blank');
+        // liberar memoria más tarde
+        setTimeout(function() { try { URL.revokeObjectURL(url); } catch (e) {} }, 60000);
+      }
+      ev.target.value = '';
+      // Cargar proveedores del listado en el sistema
+      cargarListadoNov2026();
+    }
+
+
+    function normalizarRazon(s) {
+      return String(s || '').toUpperCase().replace(/\s+/g, ' ').trim();
+    }
+    function normalizarCuit(s) {
+      return String(s || '').replace(/\D/g, '');
+    }
+    function existeRazonSocial(razon, cuit, exceptoId) {
+      const r = normalizarRazon(razon);
+      const c = normalizarCuit(cuit);
+      return datos.some(function(d) {
+        if (exceptoId && d.id === exceptoId) return false;
+        if (c && normalizarCuit(d.cuit) === c) return true;
+        if (r && normalizarRazon(d.razonSocial) === r) return true;
+        return false;
+      });
+    }
+
+    function cargarListadoNov2026() {
+      if (!confirm("¿Agregar los " + LISTADO_NOV_2026.length + " proveedores del listado del mes a la lista de trabajo?\n\nNo se duplicarán los que ya existan (mismo CUIT o misma razón social).")) return;
+      let agregados = 0, omitidos = 0;
+      LISTADO_NOV_2026.forEach(function(item) {
+        if (existeRazonSocial(item.razonSocial, item.cuit, null)) {
+          omitidos++;
+          // actualizar datos de contacto si sigue pendiente
+          const c = normalizarCuit(item.cuit);
+          const r = normalizarRazon(item.razonSocial);
+          const ex = datos.find(function(d) {
+            return (c && normalizarCuit(d.cuit) === c) || (r && normalizarRazon(d.razonSocial) === r);
+          });
+          if (ex) {
+            if (item.mail) ex.mail = item.mail;
+            if (item.vtoSistema) ex.vtoSistema = item.vtoSistema;
+            if (item.nroExpediente) ex.nroExpediente = item.nroExpediente;
+            if (!cargaIniciada(ex)) {
+              ex.observaciones = 'Pendiente de recepción de documentación.';
+            }
+          }
+          return;
+        }
+        const maxN = datos.reduce(function(m, d) { return Math.max(m, parseInt(d.nroInterno, 10) || 0); }, 0);
+        const nuevo = Object.assign({}, item, {
+          id: "mes-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+          nroInterno: String(maxN + agregados + 1),
+          observaciones: 'Pendiente de recepción de documentación.'
+        });
+        datos.push(nuevo);
+        agregados++;
+        try { sincronizarSheets(nuevo); } catch (e) {}
+      });
+      // Reconciliar mail y vto del listado en todos los registros coincidentes
+      LISTADO_NOV_2026.forEach(function(item) {
+        const c = normalizarCuit(item.cuit);
+        const r = normalizarRazon(item.razonSocial);
+        const ex = datos.find(function(d) {
+          return (c && normalizarCuit(d.cuit) === c) || (r && normalizarRazon(d.razonSocial) === r);
+        });
+        if (ex) {
+          if (item.mail) ex.mail = item.mail;
+          if (item.vtoSistema) ex.vtoSistema = item.vtoSistema;
+          if (item.nroExpediente && !ex.nroExpediente) ex.nroExpediente = item.nroExpediente;
+        }
+      });
+      guardarDatos();
+      renderLista();
+      if (agregados) {
+        toast("Se agregaron " + agregados + " proveedores" + (omitidos ? " (" + omitidos + " ya estaban)" : ""));
+      } else {
+        toast("Listado aplicado: mail y vencimientos actualizados (" + omitidos + " ya estaban)");
+      }
+    }
+
+
+    function toggleUrgente(id) {
+      const item = datos.find(d => d.id === id);
+      if (!item) return;
+      if (item.urgente) {
+        if (!confirm("¿Quitar marca URGENTE de \"" + item.razonSocial + "\"?")) return;
+        item.urgente = false;
+        item.urgentePor = "";
+        item.actualizado = new Date().toISOString();
+        guardarDatos();
+        try { sincronizarSheets(item); } catch (e) {}
+        renderLista();
+        toast("Urgente desmarcado");
+        return;
+      }
+      const quien = prompt("URGENTE – ¿Quién lo solicita?", item.urgentePor || "");
+      if (quien === null) return; // canceló
+      item.urgente = true;
+      item.urgentePor = (quien || "").trim();
+      item.actualizado = new Date().toISOString();
+      guardarDatos();
+      try { sincronizarSheets(item); } catch (e) {}
+      renderLista();
+      toast("Marcado URGENTE" + (item.urgentePor ? " – " + item.urgentePor : ""));
+    }
+
+    function cargarDatos() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        datos = raw ? JSON.parse(raw) : [];
+      } catch { datos = []; }
+    }
+    function guardarDatos() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(datos));
+    }
+
+    function parseFecha(str) {
+      if (!str) return null;
+      let s = String(str).trim();
+      // Ya viene ISO completo (Sheets a veces manda 2026-10-19T07:00:00.000Z)
+      if (/^\d{4}-\d{2}-\d{2}T/.test(s)) {
+        const d = new Date(s);
+        return isNaN(d) ? null : d;
+      }
+      // Solo fecha YYYY-MM-DD
+      if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+        const d = new Date(s + 'T12:00:00');
+        return isNaN(d) ? null : d;
+      }
+      // DD/MM/YYYY
+      const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m) {
+        const d = new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]), 12, 0, 0);
+        return isNaN(d) ? null : d;
+      }
+      const d = new Date(s);
+      return isNaN(d) ? null : d;
+    }
+    function fechaInputValue(str) {
+      // para <input type="date"> siempre YYYY-MM-DD
+      const d = parseFecha(str);
+      if (!d) return '';
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return y + '-' + m + '-' + day;
+    }
+    function formatoFecha(str) {
+      if (!str) return '—';
+      const d = parseFecha(str);
+      if (!d) return str;
+      return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+    function diasEntre(fechaStr) {
+      const d = parseFecha(fechaStr);
+      if (!d) return null;
+      const hoy = new Date();
+      hoy.setHours(12, 0, 0, 0);
+      return Math.round((d - hoy) / 86400000);
+    }
+    function sumarDias(fechaStr, dias) {
+      const d = parseFecha(fechaStr);
+      if (!d) return null;
+      d.setDate(d.getDate() + dias);
+      return d.toISOString().slice(0, 10);
+    }
+    function getLimiteSub(item) {
+      if (item.fechaLimiteSub) return item.fechaLimiteSub;
+      if (item.fechaPresentacion) return sumarDias(item.fechaPresentacion, 30);
+      return null;
+    }
+    function getVencInscrip(item) {
+      if (item.vtoSistema) return item.vtoSistema;
+      return item.fechaAlta ? sumarDias(item.fechaAlta, 365) : null;
+    }
+    function calcularAlerta(item) {
+      const limite = getLimiteSub(item);
+      const venc = getVencInscrip(item);
+      const diasSub = diasEntre(limite);
+      const diasVig = diasEntre(venc);
+      if (limite && diasSub !== null && diasSub < 0) return { texto: 'VENCIDO SUBSANACIÓN', clase: 'badge-vencido', tipo: 'vencido' };
+      if (limite && diasSub !== null && diasSub <= 7) return { texto: 'URGENTE SUBSANACIÓN', clase: 'badge-urgente', tipo: 'urgente' };
+      if (venc && diasVig !== null && diasVig < 0) return { texto: 'INSCRIPCIÓN VENCIDA', clase: 'badge-vencido', tipo: 'vencido' };
+      if (venc && diasVig !== null && diasVig <= 30) return { texto: 'RENOVAR PRONTO', clase: 'badge-urgente', tipo: 'urgente' };
+      if (item.estado === 'Activo' || item.estado === 'Comprobante') return { texto: 'OK', clase: 'badge-ok', tipo: 'ok' };
+      return { texto: 'EN PROCESO', clase: 'badge-proceso', tipo: 'proceso' };
+    }
+
+    function toast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2500);
+    }
+
+    function toggleSection(el) {
+      el.classList.toggle('collapsed');
+      const body = el.nextElementSibling;
+      if (body && body.classList.contains('section-body')) body.classList.toggle('hidden');
+    }
+
+    // --- Multi-medio ---
+    let mediosExtra = []; // array of { tipo, nombre, docs: {} }
+    // índice 0 se sincroniza con tipoMedio / nombreMedio de datos generales
+
+    const DOCS_POR_MEDIO = {
+      'Agencia': [
+        { id: 'dj', label: 'DJ Agencia', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'enacom', label: 'Certificado ENACOM', opts: ['Pendiente','Presentado','Observado','No aplica'] }
+      ],
+      'Web': [
+        { id: 'dj', label: 'DJ Web', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'rl', label: 'RL – Propiedad Intelectual', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'obra', label: 'DNDA', opts: ['Obra Publicada - Página Web','Inscripción de Publicación Periódica'] },
+        { id: 'dominio', label: 'Dominio / NIC / WHOIS', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'capturas', label: 'Capturas', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'autorizacion', label: 'Autorización', opts: ['Pendiente','Certificada','Observada'] },
+        { id: 'titular', label: 'Nombre del Titular', tipo: 'text' }
+      ],
+      'Radio': [
+        { id: 'dj', label: 'DJ Radio', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'adjudicacion', label: 'Adjudicación / Vto. Licencia', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'vtoLicencia', label: 'Fecha Vto. Licencia', tipo: 'date' },
+        { id: 'grilla', label: 'Grilla', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'autorizacion', label: 'Autorización', opts: ['Pendiente','Certificada','Observada'] },
+        { id: 'titular', label: 'Nombre del Titular', tipo: 'text' }
+      ],
+      'Televisión': [
+        { id: 'dj', label: 'DJ TV', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'enacom', label: 'Certificado ENACOM', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'grilla', label: 'Grilla', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'autorizacion', label: 'Autorización', opts: ['Pendiente','Certificada','Observada'] },
+        { id: 'titular', label: 'Nombre del Titular', tipo: 'text' }
+      ],
+      'Diario': [
+        { id: 'dj', label: 'DJ Diario', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'rl', label: 'RL – Propiedad Intelectual', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'ins', label: 'Ins. periódica', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'medidas', label: 'Medidas', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'ejemplar', label: 'Ejemplar', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'autorizacion', label: 'Autorización', opts: ['Pendiente','Certificada','Observada'] },
+        { id: 'titular', label: 'Nombre del Titular', tipo: 'text' }
+      ],
+      'Revista': [
+        { id: 'dj', label: 'DJ Revista', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'rl', label: 'RL – Propiedad Intelectual', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'ins', label: 'Ins. periódica', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'medidas', label: 'Medidas', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'ejemplar', label: 'Ejemplar', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'autorizacion', label: 'Autorización', opts: ['Pendiente','Certificada','Observada'] },
+        { id: 'titular', label: 'Nombre del Titular', tipo: 'text' }
+      ],
+      'Productora': [
+        { id: 'dj', label: 'DJ Productora', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'produccion', label: 'Producción / Programas', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'grilla', label: 'Grilla/s', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'streaming', label: 'Streaming', opts: ['Pendiente','Presentado','No aplica','Observado'] },
+        { id: 'capturas', label: 'Captura medio / programa', opts: ['Pendiente','Presentado','Observado'] }
+      ],
+      'Vía Pública': [
+        { id: 'dj', label: 'DJ Vía Pública', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'listado', label: 'Listado ubicaciones', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'tarifario', label: 'Tarifario', opts: ['Pendiente','Presentado','Observado','Actualización'] },
+        { id: 'circuito', label: 'Circuito', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'medidas', label: 'Medidas', opts: ['Pendiente','Presentado','Observado'] }
+      ],
+      'Prod. Campañas Publicitarias': [
+        { id: 'dj', label: 'DJ Prod. Campañas', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'propuesta', label: 'Propuesta', opts: ['Pendiente','Presentado','Observado'] }
+      ],
+      'Investigaciones y Mediciones': [
+        { id: 'dj', label: 'DJ Investigaciones', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'propuesta', label: 'Propuesta', opts: ['Pendiente','Presentado','Observado'] }
+      ],
+      'Dispositivos Móviles': [
+        { id: 'dj', label: 'DJ Dispositivos Móviles', opts: ['Pendiente','Firmada','Certificada','Observada'] },
+        { id: 'resena', label: 'Reseña', opts: ['Pendiente','Presentado','Observado'] },
+        { id: 'propuesta', label: 'Propuesta', opts: ['Pendiente','Presentado','Observado'] }
+      ],
+      'Otro': [
+        { id: 'detalle', label: 'Documentación específica', tipo: 'textarea' }
+      ]
+    };
+
+    const TIPOS_MEDIO_OPTS = ['Agencia','Web','Radio','Televisión','Diario','Revista','Productora','Vía Pública','Prod. Campañas Publicitarias','Investigaciones y Mediciones','Dispositivos Móviles','Otro'];
+
+    function syncMedioPrincipal() {
+      const tipo = document.getElementById('tipoMedio').value;
+      const nombre = document.getElementById('nombreMedio').value;
+      if (mediosExtra.length === 0) {
+        mediosExtra.push({ tipo: tipo || '', nombre: nombre || '', docs: {} });
+      } else {
+        mediosExtra[0].tipo = tipo || mediosExtra[0].tipo;
+        // no pisar nombre si ya editaron en la card
+      }
+      renderMedios();
+    }
+
+    function agregarMedio() {
+      // guardar valores actuales de las cards antes de re-render
+      capturarMediosDesdeUI();
+      mediosExtra.push({ tipo: '', nombre: '', docs: {} });
+      renderMedios();
+    }
+
+    function quitarMedio(idx) {
+      if (idx === 0) {
+        toast('El primer medio se define en Datos generales');
+        return;
+      }
+      capturarMediosDesdeUI();
+      mediosExtra.splice(idx, 1);
+      renderMedios();
+    }
+
+    function capturarMediosDesdeUI() {
+      const cards = document.querySelectorAll('#listaMedios .medio-card');
+      cards.forEach((card, idx) => {
+        if (!mediosExtra[idx]) return;
+        const tipoSel = card.querySelector('.medio-tipo');
+        const nombreInp = card.querySelector('.medio-nombre');
+        if (tipoSel) mediosExtra[idx].tipo = tipoSel.value;
+        if (nombreInp) mediosExtra[idx].nombre = nombreInp.value;
+        const locInp = card.querySelector('.medio-localidad');
+        if (locInp) mediosExtra[idx].localidad = locInp.value;
+        const docs = {};
+        card.querySelectorAll('[data-doc]').forEach(el => {
+          docs[el.getAttribute('data-doc')] = el.value;
+        });
+        mediosExtra[idx].docs = docs;
+        const altaEst = card.querySelector('.medio-alta-estado');
+        const altaFec = card.querySelector('.medio-alta-fecha');
+        mediosExtra[idx].altaEstado = altaEst ? altaEst.value : '';
+        mediosExtra[idx].altaFecha = altaFec ? altaFec.value : '';
+      });
+      // sync principal a campos generales
+      if (mediosExtra[0]) {
+        if (mediosExtra[0].tipo) document.getElementById('tipoMedio').value = mediosExtra[0].tipo;
+        if (mediosExtra[0].nombre !== undefined) document.getElementById('nombreMedio').value = mediosExtra[0].nombre;
+      }
+    }
+
+    function onCambioTipoMedioCard(idx, valor) {
+      capturarMediosDesdeUI();
+      mediosExtra[idx].tipo = valor;
+      mediosExtra[idx].docs = {}; // reset docs al cambiar tipo
+      if (idx === 0) document.getElementById('tipoMedio').value = valor;
+      renderMedios();
+    }
+
+    function renderMedios() {
+      const cont = document.getElementById('listaMedios');
+      if (!cont) return;
+      if (mediosExtra.length === 0) {
+        mediosExtra.push({ tipo: document.getElementById('tipoMedio').value || '', nombre: document.getElementById('nombreMedio').value || '', docs: {} });
+      }
+      cont.innerHTML = mediosExtra.map((m, idx) => {
+        const tipoOpts = TIPOS_MEDIO_OPTS.map(t =>
+          '<option value="' + t + '"' + (m.tipo === t ? ' selected' : '') + '>' + t + '</option>'
+        ).join('');
+        const campos = DOCS_POR_MEDIO[m.tipo] || [];
+        const docsHtml = campos.map(c => {
+          const val = (m.docs && m.docs[c.id]) || '';
+          if (c.tipo === 'date') {
+            return '<div class="doc-item"><label>' + c.label + '</label><input type="date" data-doc="' + c.id + '" value="' + val + '" /></div>';
+          }
+          if (c.tipo === 'textarea') {
+            return '<div class="doc-item" style="grid-column:1/-1"><label>' + c.label + '</label><textarea data-doc="' + c.id + '" rows="2">' + val + '</textarea></div>';
+          }
+          if (c.tipo === 'text') {
+            return '<div class="doc-item"><label>' + c.label + '</label><input type="text" data-doc="' + c.id + '" value="' + String(val).replace(/"/g, '&quot;') + '" placeholder="' + c.label + '" /></div>';
+          }
+          const opts = (c.opts || []).map(o =>
+            '<option value="' + o + '"' + (val === o ? ' selected' : '') + '>' + o + '</option>'
+          ).join('');
+          return '<div class="doc-item"><label>' + c.label + '</label><select data-doc="' + c.id + '"><option value="">—</option>' + opts + '</select></div>';
+        }).join('');
+      // re-enganchar cambios de docs de medios → observaciones auto
+      cont.querySelectorAll('[data-doc]').forEach(function(el) {
+        el.addEventListener('change', actualizarObservacionesAuto);
+      });
+      cont.querySelectorAll('.medio-tipo').forEach(function(el) {
+        el.addEventListener('change', function() { setTimeout(actualizarObservacionesAuto, 50); });
+      });
+
+        return '<div class="medio-card" data-idx="' + idx + '">' +
+          '<div class="medio-card-header">' +
+            '<div><label>Tipo de medio ' + (idx === 0 ? '' : '#' + (idx + 1)) + '</label>' +
+              '<select class="medio-tipo" onchange="onCambioTipoMedioCard(' + idx + ', this.value)">' +
+                '<option value="">Seleccionar...</option>' + tipoOpts +
+              '</select></div>' +
+            '<div><label>Nombre / dominio / frecuencia</label>' +
+              '<input type="text" class="medio-nombre" value="' + (m.nombre || '').replace(/"/g, '&quot;') + '" placeholder="Ej: FM 98.5 / www.ejemplo.com" /></div>' +
+            '<div><label>Localidad</label>' +
+              '<input type="text" class="medio-localidad" value="' + (m.localidad || '').replace(/"/g, '&quot;') + '" placeholder="Localidad" /></div>' +
+            (idx > 0 ? '<button type="button" class="btn-quitar" onclick="quitarMedio(' + idx + ')">Quitar</button>' : '') +
+          '</div>' +
+          (campos.length ? '<div class="form-grid docs">' + docsHtml + '</div>' : '<p class="hint">Elegí el tipo de medio para ver la documentación.</p>') +
+          '<div class="form-grid" style="margin-top:.6rem;padding-top:.5rem;border-top:1px dashed #99f6e4">' +
+            '<div><label>Estado del medio</label>' +
+              '<select class="medio-alta-estado">' +
+                '<option value="">—</option>' +
+                '<option value="Alta"' + (m.altaEstado === 'Alta' || m.altaEstado === 'Activo' ? ' selected' : '') + '>Alta</option>' +
+                '<option value="Corrección"' + (m.altaEstado === 'Corrección' ? ' selected' : '') + '>Corrección</option>' +
+                '<option value="Pendiente"' + (m.altaEstado === 'Pendiente' ? ' selected' : '') + '>Pendiente</option>' +
+                '<option value="Vencido"' + (m.altaEstado === 'Vencido' ? ' selected' : '') + '>Vencido</option>' +
+              '</select></div>' +
+            '<div><label>Fecha</label>' +
+              '<input type="date" class="medio-alta-fecha" value="' + (m.altaFecha ? fechaInputValue(m.altaFecha) : '') + '" /></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function obtenerMediosParaGuardar() {
+      capturarMediosDesdeUI();
+      return mediosExtra.filter(m => m.tipo).map(m => ({
+        tipo: m.tipo,
+        nombre: m.nombre || '',
+        localidad: m.localidad || '',
+        docs: m.docs || {},
+        altaEstado: m.altaEstado || '',
+        altaFecha: m.altaFecha || ''
+      }));
+    }
+
+    function cargarMediosDesdeItem(item) {
+      if (item.medios && Array.isArray(item.medios) && item.medios.length) {
+        mediosExtra = item.medios.map(m => ({
+          tipo: m.tipo || '',
+          nombre: m.nombre || '',
+          localidad: m.localidad || '',
+          docs: m.docs || {},
+          altaEstado: m.altaEstado || '',
+          altaFecha: m.altaFecha || ''
+        }));
+      } else if (item.tipoMedio) {
+        // compatibilidad con registros viejos (un solo medio)
+        mediosExtra = [{
+          tipo: item.tipoMedio,
+          nombre: item.nombreMedio || '',
+          docs: extraerDocsLegacy(item)
+        }];
+      } else {
+        mediosExtra = [{ tipo: '', nombre: '', docs: {} }];
+      }
+      renderMedios();
+    }
+
+    function extraerDocsLegacy(item) {
+      // intenta armar docs del medio principal desde campos planos viejos
+      const docs = {};
+      const prefijos = {
+        'Agencia': 'ag_', 'Web': 'web_', 'Radio': 'rad_', 'Televisión': 'tv_',
+        'Diario': 'dia_', 'Revista': 'rev_', 'Productora': 'pro_', 'Vía Pública': 'vp_',
+        'Prod. Campañas Publicitarias': 'camp_', 'Investigaciones y Mediciones': 'inv_',
+        'Dispositivos Móviles': 'disp_'
+      };
+      const pre = prefijos[item.tipoMedio];
+      if (!pre) return docs;
+      Object.keys(item).forEach(k => {
+        if (k.startsWith(pre) && item[k]) {
+          docs[k.slice(pre.length)] = item[k];
+        }
+      });
+      return docs;
+    }
+
+
+
+    // --- Observaciones automáticas desde Pendiente / Observado ---
+    const LABELS_CAMPOS = {
+      docEstatuto: 'Estatuto social o Contrato Constitutivo',
+      docActa: 'Acta de designación de autoridades',
+      docPoder: 'Poder',
+      tipoSocietario: 'SA/SRL/COOP/OTRO',
+      inscripcionSoc: 'Inscripción',
+      afipConstancia: 'AFIP – Constancia inscripción',
+      f931: 'F. 931',
+      monotributo: 'Monotributo',
+      f152: 'F. 152',
+      f184: 'F. 184',
+      compRecibo: 'ARBA – Constancia de Inscripción',
+      iibb: 'ARBA',
+      cbu: 'CBU',
+      sueldo: 'Sueldo / Haberes',
+      factura: 'Factura'
+    };
+
+    const ESTADOS_ALERTA = ['Pendiente', 'Observado', 'Observada'];
+
+    function esEstadoAlerta(v) {
+      if (!v) return false;
+      const s = String(v).trim();
+      return ESTADOS_ALERTA.some(e => s === e || s.indexOf(e) === 0);
+    }
+
+    function recolectarFaltantes() {
+      const items = [];
+
+      // Campos generales / impositivos del formulario
+      Object.keys(LABELS_CAMPOS).forEach(id => {
+        const el = document.getElementById(id);
+        if (el && esEstadoAlerta(el.value)) {
+          items.push(LABELS_CAMPOS[id] + ': ' + el.value);
+        }
+      });
+
+      // Autoridades
+      capturarAutoridadesDesdeUI();
+      autoridadesExtra.forEach(function(a, idx) {
+        if (esEstadoAlerta(a.djIncomp)) {
+          const quien = a.nombre || a.cargo || ('Autoridad ' + (idx + 1));
+          items.push('DJ Incompatibilidad (' + quien + '): ' + a.djIncomp);
+        }
+      });
+
+      
+      var apoDj = document.getElementById('apoDjIncomp');
+      if (apoDj && esEstadoAlerta(apoDj.value)) {
+        items.push('DJ Incompatibilidad (Apoderado): ' + apoDj.value);
+      }
+      var apoPod = document.getElementById('apoPoder');
+      if (apoPod && esEstadoAlerta(apoPod.value)) {
+        items.push('Poder (Apoderado): ' + apoPod.value);
+      }
+
+      // Medios (capturar UI actual)
+      capturarMediosDesdeUI();
+      mediosExtra.forEach((m, idx) => {
+        if (!m.tipo) return;
+        const nombreMedio = m.nombre ? ' (' + m.nombre + ')' : '';
+        const prefijo = m.tipo + nombreMedio;
+        const camposDef = DOCS_POR_MEDIO[m.tipo] || [];
+        const docs = m.docs || {};
+        camposDef.forEach(c => {
+          const val = docs[c.id];
+          if (esEstadoAlerta(val)) {
+            items.push(prefijo + ' – ' + c.label + ': ' + val);
+          }
+        });
+      });
+
+      return items;
+    }
+
+    function armarTextoFaltantes(lista) {
+      if (!lista.length) return '';
+      return 'FALTANTES / A COMPLETAR:\n' + lista.map(x => '• ' + x).join('\n');
+    }
+
+    function actualizarObservacionesAuto() {
+      const ta = document.getElementById('observaciones');
+      if (!ta) return;
+      const faltantes = recolectarFaltantes();
+      const bloqueAuto = armarTextoFaltantes(faltantes);
+
+      const actual = ta.value || '';
+      // Separar notas manuales si ya había un bloque auto
+      let notas = actual;
+      const marcadores = [
+        'FALTANTES / A COMPLETAR:',
+        '--- Faltantes (auto) ---',
+        '--- Notas ---'
+      ];
+      for (let i = 0; i < marcadores.length; i++) {
+        const idx = notas.indexOf(marcadores[i]);
+        if (idx >= 0 && (marcadores[i].indexOf('FALTANTES') === 0 || marcadores[i].indexOf('Faltantes') >= 0)) {
+          // quitar bloque auto: desde el marcador hasta "--- Notas ---" o fin, o hasta doble salto antes de notas libres
+          const despues = notas.slice(idx);
+          const notasSep = despues.indexOf('\n--- Notas ---');
+          if (notasSep >= 0) {
+            notas = (notas.slice(0, idx) + despues.slice(notasSep + '\n--- Notas ---'.length)).trim();
+          } else {
+            // quitar solo las líneas del bloque auto (líneas que empiezan con • o el título)
+            const lineas = notas.split('\n');
+            const nuevas = [];
+            let enAuto = false;
+            for (let j = 0; j < lineas.length; j++) {
+              const L = lineas[j];
+              if (L.indexOf('FALTANTES / A COMPLETAR:') === 0 || L.indexOf('--- Faltantes') === 0) {
+                enAuto = true;
+                continue;
+              }
+              if (enAuto) {
+                if (L.trim().indexOf('•') === 0 || L.trim() === '') continue;
+                enAuto = false;
+              }
+              if (!enAuto) nuevas.push(L);
+            }
+            notas = nuevas.join('\n').trim();
+          }
+          break;
+        }
+      }
+
+      if (bloqueAuto && notas) {
+        ta.value = bloqueAuto + '\n\n--- Notas ---\n' + notas;
+      } else if (bloqueAuto) {
+        ta.value = bloqueAuto;
+      } else if (notas) {
+        ta.value = notas;
+      } else {
+        ta.value = '';
+      }
+    }
+
+    function engancharAutoObs() {
+      // selects de campos generales
+      Object.keys(LABELS_CAMPOS).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', actualizarObservacionesAuto);
+      });
+    }
+
+
+    // --- Autoridades dinámicas ---
+    let autoridadesExtra = []; // [{ djIncomp, cargo, nombre, dni }, ...]
+
+    function agregarAutoridad() {
+      capturarAutoridadesDesdeUI();
+      autoridadesExtra.push({ djIncomp: '', cargo: '', nombre: '', dni: '', dniEstado: '' });
+      renderAutoridades();
+    }
+
+    function quitarAutoridad(idx) {
+      if (autoridadesExtra.length <= 1) {
+        toast('Debe quedar al menos una fila');
+        return;
+      }
+      capturarAutoridadesDesdeUI();
+      autoridadesExtra.splice(idx, 1);
+      renderAutoridades();
+    }
+
+    function capturarAutoridadesDesdeUI() {
+      const cont = document.getElementById('bloqueAutoridadesUI');
+      if (!cont) return;
+      const rows = cont.querySelectorAll('.aut-row');
+      const arr = [];
+      rows.forEach(row => {
+        arr.push({
+          djIncomp: (row.querySelector('.aut-dj') || {}).value || '',
+          cargo: (row.querySelector('.aut-cargo') || {}).value || '',
+          nombre: (row.querySelector('.aut-nombre') || {}).value || '',
+          dni: (row.querySelector('.aut-dni') || {}).value || '',
+          dniEstado: (row.querySelector('.aut-dni-estado') || {}).value || ''
+        });
+      });
+      // DJ Vigencia
+      const djV = document.getElementById('djAnio');
+      if (djV && rows.length) {
+        // stored separately as djAnio
+      }
+      if (arr.length) autoridadesExtra = arr;
+    }
+
+    function renderAutoridades() {
+      const cont = document.getElementById('bloqueAutoridadesUI');
+      if (!cont) return;
+      if (!autoridadesExtra.length) {
+        autoridadesExtra = [{ djIncomp: '', cargo: '', nombre: '', dni: '', dniEstado: '' }];
+      }
+      const djVig = (document.getElementById('djAnio') && document.getElementById('djAnio').value) || (window._djVigenciaTmp || '');
+      let html = '';
+      // Primera fila: DJ Vigencia + DJ Incompatibilidad + Cargo + Nombre + DNI + DNI Estado
+      autoridadesExtra.forEach((a, idx) => {
+        const djOpts = ['Pendiente','Firmada (vigente)','Certificada','Observada'].map(o =>
+          '<option value="' + o + '"' + (a.djIncomp === o ? ' selected' : '') + '>' + o + '</option>'
+        ).join('');
+        const dniEstOpts = ['Pendiente','Vigente','Observado'].map(o =>
+          '<option value="' + o + '"' + (a.dniEstado === o ? ' selected' : '') + '>' + o + '</option>'
+        ).join('');
+        html += '<div class="form-grid aut-row" data-idx="' + idx + '" style="margin-bottom:.55rem;align-items:end">';
+        if (idx === 0) {
+          html += '<div><label>DJ Vigencia</label>' +
+            '<input type="text" id="djAnio" value="' + (document.getElementById('djAnio') ? (document.getElementById('djAnio').value || '').replace(/"/g,'&quot;') : (window._djVigenciaTmp || '').replace(/"/g,'&quot;')) + '" placeholder="2025 o anterior" /></div>';
+        } else {
+          html += '<div><label>&nbsp;</label><div style="height:34px"></div></div>';
+        }
+        html += '<div><label>DJ Incompatibilidad</label>' +
+          '<select class="aut-dj"><option value="">—</option>' + djOpts + '</select></div>' +
+          '<div><label>Autoridad – Cargo</label>' +
+          '<input type="text" class="aut-cargo" value="' + (a.cargo || '').replace(/"/g,'&quot;') + '" placeholder="Cargo" /></div>' +
+          '<div><label>Autoridad – Nombre</label>' +
+          '<input type="text" class="aut-nombre" value="' + (a.nombre || '').replace(/"/g,'&quot;') + '" placeholder="Nombre" /></div>' +
+          '<div><label>Autoridad – DNI</label>' +
+          '<div style="display:flex;gap:.35rem;align-items:center">' +
+          '<input type="text" class="aut-dni" value="' + (a.dni || '').replace(/"/g,'&quot;') + '" placeholder="DNI" style="flex:1" />' +
+          (idx > 0 ? '<button type="button" class="btn-sm btn-danger" onclick="quitarAutoridad(' + idx + ')" title="Quitar">✕</button>' : '') +
+          '</div></div>' +
+          '<div><label>DNI</label>' +
+          '<select class="aut-dni-estado"><option value="">—</option>' + dniEstOpts + '</select></div>';
+        html += '</div>';
+      });
+      cont.innerHTML = html;
+      // restore dj vigencia if wiped
+      if (window._djVigenciaTmp && document.getElementById('djAnio') && !document.getElementById('djAnio').value) {
+        document.getElementById('djAnio').value = window._djVigenciaTmp;
+      }
+      const djEl = document.getElementById('djAnio');
+      if (djEl) {
+        djEl.addEventListener('change', function() { window._djVigenciaTmp = this.value; });
+        djEl.addEventListener('input', function() { window._djVigenciaTmp = this.value; });
+      }
+      // enganchar faltantes
+      cont.querySelectorAll('.aut-dj').forEach(function(el) {
+        el.addEventListener('change', actualizarObservacionesAuto);
+      });
+    }
+
+    function obtenerAutoridadesParaGuardar() {
+      capturarAutoridadesDesdeUI();
+      const djEl = document.getElementById('djAnio');
+      if (djEl) window._djVigenciaTmp = djEl.value;
+      return autoridadesExtra.filter(a => a.cargo || a.nombre || a.dni || a.djIncomp || a.dniEstado);
+    }
+
+    function cargarAutoridadesDesdeItem(item) {
+      window._djVigenciaTmp = item.djAnio || '';
+      if (item.autoridades && Array.isArray(item.autoridades) && item.autoridades.length) {
+        autoridadesExtra = item.autoridades.map(a => ({
+          djIncomp: a.djIncomp || '',
+          cargo: a.cargo || '',
+          nombre: a.nombre || '',
+          dni: a.dni || '',
+          dniEstado: a.dniEstado || ''
+        }));
+      } else {
+        // compat registros viejos
+        const rows = [];
+        if (item.djIncomp || item.autCargo || item.autNombre || item.autDni || item.aut1Cargo) {
+          rows.push({
+            djIncomp: item.djIncomp || '',
+            cargo: item.aut1Cargo || item.autCargo || '',
+            nombre: item.aut1Nombre || item.autNombre || '',
+            dni: item.aut1Dni || item.autDni || '',
+            dniEstado: ''
+          });
+        }
+        for (let i = 2; i <= 4; i++) {
+          const c = item['aut' + i + 'Cargo'], n = item['aut' + i + 'Nombre'], d = item['aut' + i + 'Dni'];
+          if (c || n || d) rows.push({ djIncomp: '', cargo: c || '', nombre: n || '', dni: d || '', dniEstado: '' });
+        }
+        autoridadesExtra = rows.length ? rows : [{ djIncomp: '', cargo: '', nombre: '', dni: '', dniEstado: '' }];
+      }
+      renderAutoridades();
+      if (document.getElementById('djAnio')) {
+        document.getElementById('djAnio').value = window._djVigenciaTmp || '';
+      }
+    }
+
+
+    // --- Actualizaciones dinámicas ---
+    let actualizacionesExtra = []; // [{ fecha, nota }, ...]
+
+    function agregarActualizacion() {
+      capturarActualizacionesDesdeUI();
+      actualizacionesExtra.push({ fecha: '', nota: '' });
+      renderActualizaciones();
+      ['finAltaSistema','finServidor','finGmail','finComprobante','finBorrarMails'].forEach(function(fid) {
+        var el = document.getElementById(fid);
+        if (el) el.checked = false;
+      });
+    }
+
+    function quitarActualizacion(idx) {
+      capturarActualizacionesDesdeUI();
+      actualizacionesExtra.splice(idx, 1);
+      if (!actualizacionesExtra.length) actualizacionesExtra = [{ fecha: '', nota: '' }];
+      renderActualizaciones();
+    }
+
+    function capturarActualizacionesDesdeUI() {
+      const cont = document.getElementById('bloqueActualizaciones');
+      if (!cont) return;
+      const rows = cont.querySelectorAll('.act-row');
+      const arr = [];
+      rows.forEach(function(row) {
+        arr.push({
+          fecha: (row.querySelector('.act-fecha') || {}).value || '',
+          nota: (row.querySelector('.act-nota') || {}).value || ''
+        });
+      });
+      if (arr.length) actualizacionesExtra = arr;
+    }
+
+    function renderActualizaciones() {
+      const cont = document.getElementById('bloqueActualizaciones');
+      if (!cont) return;
+      if (!actualizacionesExtra.length) {
+        actualizacionesExtra = [{ fecha: '', nota: '' }];
+      }
+      cont.innerHTML = actualizacionesExtra.map(function(a, idx) {
+        return '<div class="form-grid act-row" data-idx="' + idx + '" style="margin-bottom:.45rem;align-items:end">' +
+          '<div><label>Actualización' + (actualizacionesExtra.length > 1 ? ' ' + (idx + 1) : '') + '</label>' +
+            '<input type="date" class="act-fecha" value="' + (a.fecha ? fechaInputValue(a.fecha) : '') + '" /></div>' +
+          '<div style="flex:2"><label>Nota</label>' +
+            '<input type="text" class="act-nota" value="' + (a.nota || '').replace(/"/g, '&quot;') + '" placeholder="Opcional" /></div>' +
+          (idx > 0 || actualizacionesExtra.length > 1
+            ? '<div><label>&nbsp;</label><button type="button" class="btn-sm btn-danger" onclick="quitarActualizacion(' + idx + ')">✕</button></div>'
+            : '') +
+        '</div>';
+      }).join('');
+    }
+
+    function obtenerActualizacionesParaGuardar() {
+      capturarActualizacionesDesdeUI();
+      return actualizacionesExtra.filter(function(a) { return a.fecha || a.nota; });
+    }
+
+    function cargarActualizacionesDesdeItem(item) {
+      if (item.actualizaciones && Array.isArray(item.actualizaciones) && item.actualizaciones.length) {
+        actualizacionesExtra = item.actualizaciones.map(function(a) {
+          return { fecha: a.fecha || '', nota: a.nota || '' };
+        });
+      } else {
+        // compat con fechaAct1..6
+        const arr = [];
+        for (var i = 1; i <= 6; i++) {
+          var f = item['fechaAct' + i];
+          if (f) arr.push({ fecha: f, nota: '' });
+        }
+        actualizacionesExtra = arr.length ? arr : [{ fecha: '', nota: '' }];
+      }
+      renderActualizaciones();
+    }
+
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+      document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === name));
+      if (name === 'lista') renderLista();
+      if (name === 'dashboard') renderDashboard();
+      if (name === 'cargar') { if (mediosExtra.length === 0) syncMedioPrincipal(); else renderMedios(); renderAutoridades(); renderActualizaciones(); }
+    }
+    document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+    document.getElementById('fechaPresentacion').addEventListener('change', function () {
+      const estado = document.getElementById('estado').value;
+      const limite = document.getElementById('fechaLimiteSub');
+      if (this.value && (estado === 'Corrección' || !limite.value)) {
+        limite.value = sumarDias(this.value, 30);
+      }
+    });
+    document.getElementById('estado').addEventListener('change', function () {
+      const fp = document.getElementById('fechaPresentacion').value;
+      const limite = document.getElementById('fechaLimiteSub');
+      if (this.value === 'Corrección' && fp && !limite.value) {
+        limite.value = sumarDias(fp, 30);
+      }
+    });
+
+    function val(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+    function setVal(id, v) {
+      const el = document.getElementById(id);
+      if (el) el.value = v || '';
+    }
+
+    function limpiarForm() {
+      document.getElementById('formTramite').reset();
+      document.getElementById('editId').value = '';
+      document.getElementById('formTitulo').textContent = 'Nuevo proveedor / trámite';
+      document.getElementById('btnGuardar').textContent = '💾 Guardar';
+      document.getElementById('btnCancelar').style.display = 'none';
+      mediosExtra = [{ tipo: '', nombre: '', docs: {} }];
+      renderMedios();
+      autoridadesExtra = [{ djIncomp: '', cargo: '', nombre: '', dni: '', dniEstado: '' }];
+      window._djVigenciaTmp = '';
+      renderAutoridades();
+      actualizacionesExtra = [{ fecha: '', nota: '' }];
+      renderActualizaciones();
+    }
+
+    function cancelarEdicion() {
+      limpiarForm();
+      switchTab('lista');
+    }
+
+    function guardar(e) {
+      e.preventDefault();
+      if (!requiereLogin()) return;
+      actualizarObservacionesAuto();
+      const id = document.getElementById('editId').value;
+      const razonCheck = val('razonSocial');
+      const cuitCheck = val('cuit');
+      if (existeRazonSocial(razonCheck, cuitCheck, id || null)) {
+        toast('Ya existe una carga con esa Razón Social o CUIT');
+        alert('No se puede guardar: esa Razón Social o CUIT ya está cargada en el sistema.');
+        return;
+      }
+      // Si no hay agente, usar el usuario logueado
+      var personalVal = val('personal') || nombreUsuario();
+      const audit = auditFields();
+      const item = {
+        id: id || Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+        nroInterno: val('nroInterno'),
+        personal: personalVal,
+        razonSocial: val('razonSocial'),
+        cuit: val('cuit'),
+        mail: val('mail'),
+        tipoPersona: val('tipoPersona'),
+        apoderado: val('apoderado'),
+        tipoTramite: val('tipoTramite'),
+        tipoMedio: val('tipoMedio'),
+        nombreMedio: val('nombreMedio'),
+        fechaPresentacion: val('fechaPresentacion'),
+        estado: val('estado'),
+        urgente: val('urgente') === 'si',
+        urgentePor: val('urgentePor'),
+        fechaLimiteSub: val('fechaLimiteSub') || null,
+        vtoSistema: val('vtoSistema') || null,
+        fechaAlta: val('fechaAlta') || null,
+        nroExpediente: val('nroExpediente'),
+        observaciones: val('observaciones'),
+        actualizado: new Date().toISOString(),
+        usuarioId: audit.usuarioId || '',
+        usuarioEmail: audit.usuarioEmail || '',
+        usuarioNombre: audit.usuarioNombre || ''
+      };
+      DOC_FIELDS.forEach(f => { item[f] = val(f); });
+      item.medios = obtenerMediosParaGuardar();
+      item.autoridades = obtenerAutoridadesParaGuardar();
+      item.actualizaciones = obtenerActualizacionesParaGuardar();
+      item.finAltaSistema = document.getElementById('finAltaSistema') && document.getElementById('finAltaSistema').checked;
+      item.finServidor = document.getElementById('finServidor') && document.getElementById('finServidor').checked;
+      item.finGmail = document.getElementById('finGmail') && document.getElementById('finGmail').checked;
+      item.finComprobante = document.getElementById('finComprobante') && document.getElementById('finComprobante').checked;
+      item.finBorrarMails = document.getElementById('finBorrarMails') && document.getElementById('finBorrarMails').checked;
+      item.apoDjIncomp = val('apoDjIncomp');
+      item.apoNombre = val('apoNombre');
+      item.apoPoder = val('apoPoder');
+      item.apoDni = val('apoDni');
+      if (item.apoNombre && !item.apoderado) item.apoderado = item.apoNombre;
+      item.djAnio = (document.getElementById('djAnio') && document.getElementById('djAnio').value) || window._djVigenciaTmp || '';
+      if (item.autoridades.length) {
+        item.djIncomp = item.autoridades[0].djIncomp || '';
+      }
+      // mantener tipoMedio/nombreMedio del principal por compatibilidad lista
+      if (item.medios.length) {
+        item.tipoMedio = item.medios[0].tipo;
+        item.nombreMedio = item.medios[0].nombre;
+      }
+
+      if (id) {
+        const idx = datos.findIndex(d => d.id === id);
+        if (idx >= 0) datos[idx] = item;
+        toast('Registro actualizado');
+      } else {
+        if (!item.nroInterno) {
+          const max = datos.reduce((m, d) => Math.max(m, parseInt(d.nroInterno) || 0), 0);
+          item.nroInterno = String(max + 1);
+        }
+        datos.push(item);
+        toast('Registro guardado');
+      }
+      guardarDatos();
+      sincronizarSheets(item);
+      limpiarForm();
+      switchTab('lista');
+    }
+
+    function sincronizarSheets(item) {
+      if (!SHEETS_URL) return;
+      const payload = Object.assign({}, item, auditFields(), { _accion: 'guardar' });
+      fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).then(function () {
+        toast('Guardado en Sheets');
+      }).catch(function (err) {
+        console.error('Sheets:', err);
+        toast('Guardado local OK (Sheets no respondió)');
+      });
+    }
+
+    function eliminarEnSheets(id, logElim) {
+      if (!SHEETS_URL || !id) return;
+      const payload = Object.assign({ id: id, _accion: 'eliminar' }, logElim || {}, auditFields());
+      fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      }).catch(function (err) { console.error('Sheets eliminar:', err); });
+    }
+
+    function editar(id) {
+      const item = datos.find(d => d.id === id);
+      if (!item) return;
+      document.getElementById('editId').value = item.id;
+      setVal('nroInterno', item.nroInterno);
+      setVal('personal', item.personal);
+      setVal('razonSocial', item.razonSocial);
+      setVal('cuit', item.cuit);
+      setVal('mail', item.mail || item.Mail || '');
+      setVal('tipoPersona', item.tipoPersona);
+      setVal('apoderado', item.apoderado);
+      setVal('tipoTramite', item.tipoTramite);
+      setVal('tipoMedio', item.tipoMedio);
+      setVal('nombreMedio', item.nombreMedio);
+      setVal('fechaPresentacion', item.fechaPresentacion ? fechaInputValue(item.fechaPresentacion) : '');
+      setVal('estado', item.estado);
+      setVal('urgente', item.urgente ? 'si' : '');
+      setVal('urgentePor', item.urgentePor || '');
+      setVal('fechaLimiteSub', item.fechaLimiteSub ? fechaInputValue(item.fechaLimiteSub) : '');
+      setVal('vtoSistema', fechaInputValue(item.vtoSistema || item.vto || item.vencimiento || '') || (item.vtoSistema || ''));
+      setVal('fechaAlta', item.fechaAlta ? fechaInputValue(item.fechaAlta) : '');
+      setVal('nroExpediente', item.nroExpediente);
+      setVal('observaciones', item.observaciones);
+      DOC_FIELDS.forEach(f => setVal(f, item[f]));
+      cargarMediosDesdeItem(item);
+      cargarAutoridadesDesdeItem(item);
+      cargarActualizacionesDesdeItem(item);
+      ['finAltaSistema','finServidor','finGmail','finComprobante','finBorrarMails'].forEach(function(fid) {
+        var el = document.getElementById(fid);
+        if (el) el.checked = !!item[fid];
+      });
+      setVal('apoDjIncomp', item.apoDjIncomp || '');
+      setVal('apoNombre', item.apoNombre || item.apoderado || '');
+      setVal('apoPoder', item.apoPoder || '');
+      setVal('apoDni', item.apoDni || '');
+      document.getElementById('formTitulo').textContent = item.razonSocial || 'Editar trámite';
+      document.getElementById('btnGuardar').textContent = '💾 Actualizar';
+      document.getElementById('btnCancelar').style.display = 'inline-block';
+      switchTab('cargar');
+      window.scrollTo(0, 0);
+    }
+
+    function pedirEliminar(id) {
+      const item = datos.find(d => d.id === id);
+      if (!item) return;
+      idEliminar = id;
+      document.getElementById('modalTexto').textContent = 'Se eliminará "' + item.razonSocial + '". Esta acción no se puede deshacer.';
+      document.getElementById('modalEliminar').classList.add('show');
+    }
+    function cerrarModal() {
+      document.getElementById('modalEliminar').classList.remove('show');
+      idEliminar = null;
+    }
+    document.getElementById('btnConfirmarEliminar').addEventListener('click', () => {
+      if (!requiereLogin()) return;
+      if (idEliminar) {
+        const idDel = idEliminar;
+        const itemDel = datos.find(d => d.id === idDel);
+        if (itemDel) {
+          const audit = auditFields();
+          const logElim = {
+            id: itemDel.id,
+            razonSocial: itemDel.razonSocial || '',
+            cuit: itemDel.cuit || '',
+            agente: itemDel.personal || nombreUsuario(),
+            nroInterno: itemDel.nroInterno || '',
+            fecha: new Date().toISOString(),
+            tipoTramite: itemDel.tipoTramite || '',
+            eliminadoPor: nombreUsuario(),
+            usuarioId: audit.usuarioId || '',
+            usuarioEmail: audit.usuarioEmail || '',
+            usuarioNombre: audit.usuarioNombre || ''
+          };
+          eliminaciones.push(logElim);
+          guardarEliminaciones();
+          eliminarEnSheets(idDel, logElim);
+        } else {
+          eliminarEnSheets(idDel, null);
+        }
+        datos = datos.filter(d => d.id !== idDel);
+        guardarDatos();
+        toast('Registro eliminado');
+        cerrarModal();
+        renderLista();
+      }
+    });
+
+    function getFiltrados() {
+      const texto = document.getElementById('filtroTexto').value.toLowerCase();
+      const estado = document.getElementById('filtroEstado').value;
+            return datos.filter(item => {
+        if (texto) {
+          const hay = [item.razonSocial, item.cuit, item.nroExpediente, item.nroInterno, item.nombreMedio, item.observaciones]
+            .join(' ').toLowerCase();
+          if (!hay.includes(texto)) return false;
+        }
+        if (estado) {
+          if (estado === 'Urgente') { if (!item.urgente) return false; }
+          else if (item.estado !== estado) return false;
+        }
+
+        return true;
+      });
+    }
+
+    function esc(s) {
+      if (!s) return '';
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+
+    function inicialesAgente(nombre) {
+      if (!nombre || !String(nombre).trim()) return '';
+      const partes = String(nombre).trim().split(/\s+/).filter(Boolean);
+      if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+      // nombre + apellido (o más): primera letra del primero y del último
+      return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+    }
+
+    function colorAgente(nombre) {
+      if (!nombre) return '#1F4E79';
+      const n = String(nombre).toLowerCase();
+      if (n.indexOf('mariela') >= 0) return '#7c3aed'; // violeta
+      if (n.indexOf('violeta') >= 0) return '#0ea5e9'; // celeste
+      if (n.indexOf('etelvina') >= 0) return '#ea580c'; // naranja
+      if (n.indexOf('agostina') >= 0) return '#16a34a'; // verde
+      return '#1F4E79';
+    }
+
+
+    function cargaIniciada(item) {
+      // Hay carga cuando hay fecha de presentación o algún medio con docs o alta
+      if (item.fechaPresentacion) return true;
+      if (item.fechaAlta) return true;
+      if (item.medios && item.medios.some(function(m) {
+        if (m.altaEstado || m.altaFecha) return true;
+        if (m.docs) {
+          for (var k in m.docs) { if (m.docs[k]) return true; }
+        }
+        return false;
+      })) return true;
+      // campos impositivos / docs generales con valor
+      var keys = ['djIncomp','docEstatuto','docActa','docPoder','afipConstancia','cbu','f931'];
+      for (var i = 0; i < keys.length; i++) {
+        if (item[keys[i]]) return true;
+      }
+      return false;
+    }
+
+    function renderLista() {
+      const tbody = document.getElementById('tablaBody');
+      const lista = getFiltrados();
+      if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="empty">' + (datos.length === 0 ? 'No hay registros. Andá a "Cargar / Editar" para agregar el primero.' : 'Ningún registro coincide con los filtros.') + '</td></tr>';
+        renderStats();
+        return;
+      }
+      // Mantener orden de carga (nº interno / orden original del listado)
+      lista.sort((a, b) => {
+        if (a.urgente && !b.urgente) return -1;
+        if (!a.urgente && b.urgente) return 1;
+        const na = parseInt(a.nroInterno, 10) || 0;
+        const nb = parseInt(b.nroInterno, 10) || 0;
+        if (na !== nb) return na - nb;
+        return 0;
+      });
+      tbody.innerHTML = lista.map(function(item, idx) {
+        let obs = item.observaciones || '';
+        // Normalizar texto de pendiente recepción
+        if (!obs || /pendiente.*recepci[oó]n.*documentaci[oó]n/i.test(obs)) {
+          if (!cargaIniciada(item)) obs = 'Pendiente de recepción de documentación.';
+        }
+        const obsCorta = obs.length > 120 ? obs.slice(0, 120) + '…' : obs;
+        const fechas = 'Presentación: ' + formatoFecha(item.fechaPresentacion) +
+          (getLimiteSub(item) ? '<br>Límite: ' + formatoFecha(getLimiteSub(item)) : '') +
+          (item.vtoSistema ? '<br>Vto. sistema: ' + formatoFecha(item.vtoSistema) : (getVencInscrip(item) ? '<br>Vto. inscripción: ' + formatoFecha(getVencInscrip(item)) : ''));
+        const iniciales = inicialesAgente(item.personal);
+        const colorAg = colorAgente(item.personal);
+        const mediosHtml = (item.medios && item.medios.length)
+            ? item.medios.map(function(m){
+                let t = esc(m.tipo) + (m.nombre ? ' <small>(' + esc(m.nombre) + ')</small>' : '');
+                if (m.altaEstado === 'Activo' && m.altaFecha) t += ' <small style="color:#059669">✓ Alta ' + formatoFecha(m.altaFecha) + '</small>';
+                else if (m.altaEstado === 'Activo' || m.altaEstado === 'Alta') t += ' <small style="color:#059669">✓ Alta</small>';
+                else if (m.altaEstado === 'Corrección') t += ' <small style="color:#d97706">Corrección</small>';
+                else if (m.altaEstado === 'Pendiente') t += ' <small style="color:#6b7280">Pendiente</small>';
+                else if (m.altaEstado === 'Vencido') t += ' <small style="color:#dc2626">Vencido</small>';
+                return t;
+              }).join('<br>')
+            : esc(item.tipoMedio);
+        // Estado: siempre EN PROCESO si hay carga iniciada; Alerta: URGENTE en rojo sin nombre de quien pide
+        var estadoHtml = cargaIniciada(item)
+          ? '<span class="badge badge-proceso">EN PROCESO</span>'
+          : '<span style="color:#9ca3af">—</span>';
+        var alertaHtml = item.urgente
+          ? '<span class="badge badge-vencido" style="background:#dc2626;color:#fff;font-weight:700">URGENTE</span>'
+          : '<span style="color:#9ca3af">—</span>';
+        return '<tr>' +
+          '<td>' + (idx + 1) + '</td>' +
+          '<td><strong>' + esc(item.razonSocial) + '</strong>' +
+            (item.cuit ? '<br><small style="color:#6b7280">' + esc(item.cuit) + '</small>' : '') +
+            (item.mail ? '<br><small style="color:#6b7280">' + esc(item.mail) + '</small>' : '') +
+            (item.tipoTramite ? '<br><small>' + esc(item.tipoTramite) + '</small>' : '') +
+          '</td>' +
+          '<td><div class="agente-wrap">' +
+            (iniciales
+              ? '<span class="badge-agente" style="background:' + colorAg + '" title="' + esc(item.personal || '') + '">' + esc(iniciales) + '</span>'
+              : '<span style="color:#9ca3af">—</span>') +
+          '</div></td>' +
+          '<td>' + mediosHtml + '</td>' +
+          '<td>' + estadoHtml + '</td>' +
+          '<td>' + alertaHtml + '</td>' +
+          '<td style="max-width:280px;font-size:.8rem;color:#374151" title="' + esc(obs).replace(/"/g, '&quot;') + '">' +
+            (obs ? esc(obsCorta) : '<span style="color:#9ca3af">—</span>') +
+          '</td>' +
+          '<td style="font-size:.75rem;white-space:nowrap;color:#6b7280">' + fechas + '</td>' +
+          '<td class="col-acciones"><div class="actions">' +
+            '<button type="button" class="btn-sm btn-primary" onclick="editar(\'' + item.id + '\')">Editar</button>' +
+            '<button type="button" class="btn-sm btn-danger" onclick="pedirEliminar(\'' + item.id + '\')" title="Eliminar">✕</button>' +
+          '</div></td></tr>';
+      }).join('');
+      renderStats();
+    }
+
+    function renderStats() {
+      let vencidos = 0, activos = 0;
+      datos.forEach(item => {
+        const a = calcularAlerta(item);
+        if (a.tipo === 'vencido' || item.estado === 'Vencido') vencidos++;
+        else if (item.estado === 'Activo') activos++;
+      });
+      document.getElementById('statsBar').innerHTML =
+        '<div class="stat"><div class="num">' + datos.length + '</div><div class="label">Total</div></div>' +
+        '<div class="stat alert"><div class="num">' + vencidos + '</div><div class="label">Vencidos</div></div>' +
+        '<div class="stat ok"><div class="num">' + activos + '</div><div class="label">Activos</div></div>';
+    }
+
+
+    function esMismaFecha(iso, ymd) {
+      if (!iso || !ymd) return false;
+      const d = parseFecha(iso);
+      if (!d) {
+        // try string start
+        return String(iso).slice(0, 10) === ymd;
+      }
+      return fechaInputValue(d.toISOString ? d.toISOString() : iso) === ymd || fechaInputValue(iso) === ymd;
+    }
+    function itemsDelDia(ymd) {
+      return datos.filter(function(item) {
+        if (item.actualizado && String(item.actualizado).slice(0, 10) === ymd) return true;
+        if (item.fechaPresentacion && fechaInputValue(item.fechaPresentacion) === ymd) return true;
+        if (item.fechaAlta && fechaInputValue(item.fechaAlta) === ymd) return true;
+        if (item.actualizaciones && item.actualizaciones.some(function(a) {
+          return a.fecha && fechaInputValue(a.fecha) === ymd;
+        })) return true;
+        return false;
+      });
+    }
+    function diaAnteriorYmd(ymd) {
+      const d = parseFecha(ymd);
+      if (!d) return null;
+      d.setDate(d.getDate() - 1);
+      return fechaInputValue(d.toISOString());
+    }
+
+    function eliminacionesDelDia(ymd) {
+      return (eliminaciones || []).filter(function(e) {
+        return e.fecha && String(e.fecha).slice(0, 10) === ymd;
+      });
+    }
+
+    function generarInformePDF() {
+      const inp = document.getElementById('informeFecha');
+      let ymd = inp && inp.value;
+      if (!ymd) {
+        const hoy = new Date();
+        ymd = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
+        if (inp) inp.value = ymd;
+      }
+      const ymdAnt = diaAnteriorYmd(ymd);
+      const listaHoy = itemsDelDia(ymd);
+      const listaAnt = ymdAnt ? itemsDelDia(ymdAnt) : [];
+      // Unir día actual + día anterior (sin duplicar por id)
+      const idsVistos = {};
+      const lista = [];
+      listaHoy.forEach(function(it) { idsVistos[it.id] = true; lista.push(it); });
+      listaAnt.forEach(function(it) { if (!idsVistos[it.id]) { idsVistos[it.id] = true; lista.push(it); } });
+
+      const elimHoy = eliminacionesDelDia(ymd);
+      const elimAnt = ymdAnt ? eliminacionesDelDia(ymdAnt) : [];
+      const elimTodas = elimHoy.concat(elimAnt);
+
+      const prev = document.getElementById('informePreview');
+      if (prev) {
+        var msg = 'Se incluirán <b>' + listaHoy.length + '</b> del ' + formatoFecha(ymd);
+        if (listaAnt.length) msg += ' + <b>' + listaAnt.length + '</b> del día anterior (' + formatoFecha(ymdAnt) + ')';
+        if (elimTodas.length) msg += ' · <b>' + elimTodas.length + '</b> eliminación(es)';
+        if (!lista.length && !elimTodas.length) msg = 'No hay cargas ni eliminaciones para el ' + formatoFecha(ymd) + ' ni el día anterior.';
+        prev.innerHTML = msg + '.';
+      }
+      if (!lista.length && !elimTodas.length) {
+        toast('No hay registros para esa fecha ni el día anterior');
+        return;
+      }
+      function filasDe(listaItems) {
+        return listaItems.map(function(item, i) {
+          const medios = (item.medios && item.medios.length)
+            ? item.medios.map(function(m) {
+                return m.tipo + (m.localidad ? ' (' + m.localidad + ')' : '') + (m.nombre ? ' - ' + m.nombre : '');
+              }).join('; ')
+            : (item.tipoMedio || '—');
+          return '<tr>' +
+            '<td>' + (i+1) + '</td>' +
+            '<td>' + esc(item.nroInterno || '') + '</td>' +
+            '<td>' + esc(item.razonSocial || '') + '</td>' +
+            '<td>' + esc(item.cuit || '') + '</td>' +
+            '<td>' + esc(item.tipoTramite || '') + '</td>' +
+            '<td>' + esc(item.estado || 'EN PROCESO') + '</td>' +
+            '<td>' + esc(medios) + '</td>' +
+            '<td>' + esc(item.personal || '') + '</td>' +
+            '<td>' + formatoFecha(item.fechaPresentacion) + '</td>' +
+            '</tr>';
+        }).join('');
+      }
+      var filasHoy = filasDe(listaHoy);
+      var filasAnt = filasDe(listaAnt);
+      var filasElim = elimTodas.map(function(e, i) {
+        return '<tr style="background:#fee2e2">' +
+          '<td>' + (i+1) + '</td>' +
+          '<td>' + esc(e.nroInterno || '') + '</td>' +
+          '<td>' + esc(e.razonSocial || '') + '</td>' +
+          '<td>' + esc(e.cuit || '') + '</td>' +
+          '<td>' + esc(e.tipoTramite || '') + '</td>' +
+          '<td>ELIMINADO</td>' +
+          '<td>—</td>' +
+          '<td>' + esc(e.agente || '') + '</td>' +
+          '<td>' + formatoFecha(e.fecha) + '</td>' +
+          '</tr>';
+      }).join('');
+
+      var seccionHoy = listaHoy.length
+        ? '<h2 style="margin-top:18px">Cargas del ' + formatoFecha(ymd) + ' (' + listaHoy.length + ')</h2>' +
+          '<table><thead><tr><th>#</th><th>Nro</th><th>Razon Social</th><th>CUIT</th><th>Tramite</th><th>Estado</th><th>Medios</th><th>Agente</th><th>Presentacion</th></tr></thead><tbody>' + filasHoy + '</tbody></table>'
+        : '';
+      var seccionAnt = listaAnt.length
+        ? '<h2 style="margin-top:18px">Cargas del día anterior – ' + formatoFecha(ymdAnt) + ' (' + listaAnt.length + ')</h2>' +
+          '<table><thead><tr><th>#</th><th>Nro</th><th>Razon Social</th><th>CUIT</th><th>Tramite</th><th>Estado</th><th>Medios</th><th>Agente</th><th>Presentacion</th></tr></thead><tbody>' + filasAnt + '</tbody></table>'
+        : '';
+      var seccionElim = elimTodas.length
+        ? '<h2 style="margin-top:18px;color:#9C0006">Eliminaciones registradas (' + elimTodas.length + ')</h2>' +
+          '<table><thead><tr><th>#</th><th>Nro</th><th>Razon Social</th><th>CUIT</th><th>Tramite</th><th>Estado</th><th>Medios</th><th>Agente</th><th>Fecha elim.</th></tr></thead><tbody>' + filasElim + '</tbody></table>'
+        : '';
+
+      const htmlDoc = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Informe ' + ymd + '</title>' +
+        '<style>body{font-family:Arial,sans-serif;font-size:11px;color:#111;margin:24px}' +
+        'h1{font-size:16px;color:#1F4E79;margin:0 0 4px}' +
+        'h2{font-size:12px;color:#555;font-weight:normal;margin:0 0 12px}' +
+        'table{width:100%;border-collapse:collapse;margin-bottom:8px}' +
+        'th,td{border:1px solid #ccc;padding:5px 6px;text-align:left}' +
+        'th{background:#1F4E79;color:#fff}' +
+        'tr:nth-child(even){background:#f5f7fa}' +
+        '@media print{button{display:none}}</style></head><body>' +
+        '<button onclick="window.print()" style="padding:8px 14px;margin-bottom:12px;cursor:pointer">Imprimir / Guardar PDF</button>' +
+        '<h1>Informe de cargas del día</h1>' +
+        '<h2>Registro Oficial de Medios Publicitarios - PBA · ' + formatoFecha(ymd) +
+          (ymdAnt ? ' (incluye día anterior ' + formatoFecha(ymdAnt) + ')' : '') +
+          ' · ' + lista.length + ' registros' + (elimTodas.length ? ' · ' + elimTodas.length + ' eliminaciones' : '') + '</h2>' +
+        seccionHoy + seccionAnt + seccionElim +
+        '<p style="margin-top:18px;color:#666;font-size:10px">Generado desde Sistema de Seguimiento de Trámites</p>' +
+        '</body></html>';
+      const w = window.open('', '_blank');
+      if (!w) { alert('Permití ventanas emergentes para descargar el informe'); return; }
+      w.document.write(htmlDoc);
+      w.document.close();
+      toast('Informe listo – usa Imprimir / Guardar PDF en la ventana');
+    }
+
+function renderDashboard() {
+      const inp = document.getElementById('informeFecha');
+      if (inp && !inp.value) {
+        const hoy = new Date();
+        inp.value = hoy.getFullYear() + '-' + String(hoy.getMonth()+1).padStart(2,'0') + '-' + String(hoy.getDate()).padStart(2,'0');
+      }
+      const ymd = inp ? inp.value : '';
+      const lista = ymd ? itemsDelDia(ymd) : [];
+      const prev = document.getElementById('informePreview');
+      if (prev && ymd) {
+        prev.innerHTML = lista.length
+          ? ('Hay <b>' + lista.length + '</b> registros del ' + formatoFecha(ymd) + '.')
+          : ('No hay cargas registradas para el ' + formatoFecha(ymd) + '.');
+      }
+    }
+
+    function exportarCSV() {
+      if (datos.length === 0) { toast('No hay datos'); return; }
+      const baseHeaders = ['Nº Interno','Personal','Razón Social','CUIT','Tipo Persona','Apoderado','Tipo Trámite','Tipo Medio','Nombre Medio','Fecha Presentación','Estado','Fecha Límite Corrección','Fecha Alta','Vencimiento Inscripción','Nº Expediente','Alerta','Observaciones'];
+      const headers = baseHeaders.concat(DOC_FIELDS);
+      const rows = datos.map(item => {
+        const alerta = calcularAlerta(item);
+        const base = [
+          item.nroInterno, item.personal, item.razonSocial, item.cuit, item.tipoPersona, item.apoderado,
+          item.tipoTramite, item.tipoMedio, item.nombreMedio, item.fechaPresentacion, item.estado,
+          getLimiteSub(item) || '', item.fechaAlta || '', getVencInscrip(item) || '',
+          item.nroExpediente, alerta.texto, item.observaciones
+        ];
+        const docs = DOC_FIELDS.map(f => item[f] || '');
+        return base.concat(docs).map(v => '"' + String(v || '').replace(/"/g, '""') + '"').join(',');
+      });
+      const csv = [headers.join(',')].concat(rows).join('\n');
+      descargar(csv, 'tramites_medios_completo.csv', 'text/csv;charset=utf-8');
+      toast('CSV exportado');
+    }
+
+    function exportarJSON() {
+      descargar(JSON.stringify(datos, null, 2), 'tramites_medios_backup.json', 'application/json');
+      toast('Backup JSON exportado');
+    }
+
+    function importarJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (!Array.isArray(imported)) throw new Error('Formato inválido');
+          if (confirm('Importar ' + imported.length + ' registros.\\nAceptar = Reemplazar\\nCancelar = Agregar a existentes')) {
+            datos = imported;
+          } else {
+            const ids = new Set(datos.map(d => d.id));
+            imported.forEach(item => {
+              if (!item.id) item.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+              if (!ids.has(item.id)) datos.push(item);
+            });
+          }
+          guardarDatos();
+          renderLista();
+          toast('Datos importados');
+        } catch (err) {
+          alert('Error: ' + err.message);
+        }
+        e.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function descargar(contenido, nombre, tipo) {
+      const blob = new Blob(['\\ufeff' + contenido], { type: tipo });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = nombre;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    ['filtroTexto','filtroEstado'].forEach(id => {
+      document.getElementById(id).addEventListener('input', renderLista);
+      document.getElementById(id).addEventListener('change', renderLista);
+    });
+
+    document.getElementById('nombreMedio').addEventListener('change', function() {
+      if (mediosExtra[0]) { mediosExtra[0].nombre = this.value; renderMedios(); }
+    });
+    engancharAutoObs();
+    initAuthUI();
+    cargarDatos();
+    cargarEliminaciones();
+
+    // Login obligatorio: solo entra a la app con sesión válida
+    if (getUsuario()) {
+      mostrarApp();
+      renderLista();
+      cargarDesdeSheets(function(ok) {
+        renderLista();
+        if (document.getElementById('dashboard').classList.contains('active')) renderDashboard();
+      });
+    } else {
+      mostrarAuth();
+    }
+  </script>
+</body>
+</html>
